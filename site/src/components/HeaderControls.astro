@@ -1,0 +1,60 @@
+---
+import Default from '@astrojs/starlight/components/ThemeSelect.astro';
+---
+<!-- One site-wide control. Its text says what pressing it will do, so it needs no icon to decode. -->
+<button type="button" class="pause-all" data-pause-all>
+  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="i-pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="i-play"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5Z"/></svg>
+  <span data-pause-text>Pause motion</span>
+</button>
+<Default />
+
+<style>
+  .pause-all {
+    all: unset;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2rem;
+    padding: 0 0.7rem;
+    border-radius: 8px;
+    font-size: var(--sl-text-xs);
+    white-space: nowrap;
+    color: var(--sl-color-gray-3);
+    border: 1px solid var(--sl-color-gray-4);
+  }
+  .pause-all:hover { color: var(--sl-color-white); }
+  .pause-all:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+  .pause-all .i-play, :global([data-loaders-paused]) .pause-all .i-pause { display: none; }
+  :global([data-loaders-paused]) .pause-all .i-play { display: block; }
+</style>
+
+<script>
+  import '../scripts/loaders.ts'; // wires up this button
+</script>
+
+<script>
+  // WCAG 2.5.3 (Label in Name): Starlight's search button is labelled "Search" but also shows its
+  // keyboard shortcut, so its visible text isn't in its name. Naming it from its content fixes that.
+  for (const b of document.querySelectorAll('button[data-open-modal]')) b.removeAttribute('aria-label');
+</script>
+
+<script>
+  // WCAG 2.1.1: a wide table or code block scrolls sideways, so keyboard users must be able to focus it to
+  // scroll it. Checked again once web fonts load, because they change how wide each line is.
+  const scrollers = [...document.querySelectorAll<HTMLElement>('.sl-markdown-content table, .expressive-code pre')];
+  const markScrollable = () => {
+    for (const t of scrollers) {
+      if (t.scrollWidth > t.clientWidth + 1) t.tabIndex = 0;
+      else t.removeAttribute('tabindex');
+    }
+  };
+  markScrollable();
+  document.fonts?.ready.then(markScrollable);
+  addEventListener('resize', markScrollable, { passive: true });
+  // A code block in a hidden tab has no width until its tab is shown.
+  addEventListener('click', (e) => {
+    if ((e.target as Element).closest?.('[role=tab]')) requestAnimationFrame(markScrollable);
+  });
+</script>

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "include": [
+      "src/**",
+      "test/**",
+      "scripts/**",
+      "size/**",
+      "types/**",
+      "site/src/**/*.ts",
+      "site/scripts/**",
+      "site/astro.config.mjs",
+      "*.ts",
+      "*.json"
+    ],
+    "ignore": [
+      "dist",
+      "node_modules",
+      "site/node_modules",
+      "site/dist",
+      "site/.astro",
+      "test/browser/__screenshots__",
+      "types/jsx.d.cts",
+      "test-results",
+      "playwright-report"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 140
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "all",
+      "semicolons": "always"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noForEach": "off"
+      },
+      "style": {
+        "useSingleVarDeclarator": "off"
+      }
+    }
+  },
+  "organizeImports": {
+    "enabled": false
+  },
+  "overrides": [
+    {
+      "include": ["test/**", "scripts/**", "size/**", "site/scripts/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noNonNullAssertion": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    }
+  ]
+}

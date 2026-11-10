@@ -1,0 +1,46 @@
+---
+title: Options
+description: Every option, its attribute and its default.
+---
+
+Options work the same everywhere: as `mount()` options, React and Vue props, and `<mulling-status>` attributes.
+
+Every row can be linked to: for example [`#size`](#size). Defaults in code are real values; “unset” means the option has no value until you give one.
+
+| Option | Attribute | Default | Accepted values and what it does |
+| --- | --- | --- | --- |
+| <code id="type">type</code> | `type` | `'breath'` | A loader name: `breath`, `orbit`, `tide`, `blink`, `coil`, `murmur`, `scribble`, `pond`, or one you [registered](../../guides/custom-loaders/). Shown when no `state` is set |
+| <code id="state">state</code> | `state` | unset | `thinking`, `searching`, `writing`, `done` or `error`. Overrides `type` |
+| <code id="states">states</code> | `loader-thinking`, `loader-searching`, `loader-writing` | `{ thinking: 'breath', searching: 'murmur', writing: 'tide' }` | A loader name for any working state. Merges key by key |
+| <code id="labels">labels</code> | `label-thinking`, `label-searching`, `label-writing`, `label-done`, `label-error` | `'Thinking'`, `'Searching'`, `'Writing'`, `'Done'`, `'Something went wrong'` | What screen readers hear in each state. Merges key by key |
+| <code id="announce">announce</code> | `announce` | `'polite'` | `'polite'`: changes are spoken through one shared announcer, so loaders never talk over each other. `'off'`: the loader is its own `role="status"` element |
+| <code id="size">size</code> | `size` | `20` | Width and height in pixels: a number above 0, up to `1024`. No units (`24`, not `'24px'`) |
+| <code id="color">color</code> | `color` | `'currentColor'` | Any CSS color, including `var(--brand)`, `oklch()` and `color-mix()` |
+| <code id="speed">speed</code> | `speed` | `1` | A speed multiplier above 0: `0.5` is half speed, `2` is double |
+| <code id="label">label</code> | `label` | `'Loading'` | What screen readers hear when no `state` is set |
+| <code id="decorative">label: null</code> | `decorative` | unset | Hides the loader from screen readers when visible text already explains it |
+| <code id="reduced-motion">reducedMotion</code> | `reduced-motion` | `'auto'` | `'auto'` follows the system setting; `true` always shows the calm version; `false` always animates |
+| <code id="paused">paused</code> | `paused` | `false` | `true` stops the animation where it is |
+| <code id="max-fps">maxFps</code> | `max-fps` | `30` at 32px and smaller; unset above | Frame-rate cap for canvas loaders: a number above 0. `Infinity` (attribute `none`) removes it |
+| <code id="time">time</code> | `time` | unset | A number of seconds: freezes the loader that far in, for screenshot tests and static previews |
+| <code id="nonce">nonce</code> | `nonce` | unset | Nonce for injected `<style>` tags; see [Content Security Policy](../../guides/csp/) |
+
+## The handle
+
+`mount()` returns a handle with `update(options)`, `refresh()` and `destroy()`.
+
+- `update()` changes only what you pass. `labels` and `states` merge key by key; set a key to `undefined` to restore its default, or `labels: undefined` to restore them all.
+- `refresh()` re-reads colors from the page.
+- `destroy()` removes the loader. Calling `update()` or `refresh()` afterwards does nothing.
+
+## Invalid values
+
+Options are checked every time they're set, whether they come from JavaScript, props or attributes. A value that can't work is replaced by the default, and a warning is logged once. The warning says what to write instead, and suggests the nearest match for a mistyped name:
+
+```
+mulling: invalid size "32px": use a number of pixels, like 24. Using 20.
+mulling: <mulling-status state="Thinking"> is invalid: use thinking, searching, writing, done or error. Did you mean "thinking"? Using no state.
+mulling: "orbitt" isn't registered. Did you mean "orbit"? Showing "breath".
+```
+
+A loader never breaks or goes blank because of a bad value.

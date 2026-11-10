@@ -1,0 +1,11 @@
+# Keeps the commit-SHA pins in .github/workflows up to date: Dependabot opens a pull request when an
+# action releases a new version, updating both the SHA and its "# vX.Y.Z" comment.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']

@@ -1,0 +1,228 @@
+{
+  "name": "mulling",
+  "version": "1.0.0",
+  "description": "Accessible loaders for AI interfaces: thinking, searching, writing, done and error, with calm reduced-motion versions. React, Vue and a web component.",
+  "type": "module",
+  "main": "./dist/mulling.cjs",
+  "module": "./dist/mulling.js",
+  "types": "./dist/types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "core": ["./dist/types/core.d.ts"],
+      "loaders": ["./dist/types/loaders/index.d.ts"],
+      "react": ["./dist/types/react/index.d.ts"],
+      "react/core": ["./dist/types/react/core.d.ts"],
+      "vue": ["./dist/types/vue/index.d.ts"],
+      "vue/core": ["./dist/types/vue/core.d.ts"],
+      "jsx": ["./types/jsx.d.ts"]
+    }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/mulling.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.cts",
+        "default": "./dist/mulling.cjs"
+      }
+    },
+    "./core": {
+      "import": {
+        "types": "./dist/types/core.d.ts",
+        "default": "./dist/core.js"
+      },
+      "require": {
+        "types": "./dist/types/core.d.cts",
+        "default": "./dist/core.cjs"
+      }
+    },
+    "./loaders": {
+      "import": {
+        "types": "./dist/types/loaders/index.d.ts",
+        "default": "./dist/loaders.js"
+      },
+      "require": {
+        "types": "./dist/types/loaders/index.d.cts",
+        "default": "./dist/loaders.cjs"
+      }
+    },
+    "./react": {
+      "import": {
+        "types": "./dist/types/react/index.d.ts",
+        "default": "./dist/react.js"
+      },
+      "require": {
+        "types": "./dist/types/react/index.d.cts",
+        "default": "./dist/react.cjs"
+      }
+    },
+    "./react/core": {
+      "import": {
+        "types": "./dist/types/react/core.d.ts",
+        "default": "./dist/react-core.js"
+      },
+      "require": {
+        "types": "./dist/types/react/core.d.cts",
+        "default": "./dist/react-core.cjs"
+      }
+    },
+    "./vue": {
+      "import": {
+        "types": "./dist/types/vue/index.d.ts",
+        "default": "./dist/vue.js"
+      },
+      "require": {
+        "types": "./dist/types/vue/index.d.cts",
+        "default": "./dist/vue.cjs"
+      }
+    },
+    "./vue/core": {
+      "import": {
+        "types": "./dist/types/vue/core.d.ts",
+        "default": "./dist/vue-core.js"
+      },
+      "require": {
+        "types": "./dist/types/vue/core.d.cts",
+        "default": "./dist/vue-core.cjs"
+      }
+    },
+    "./jsx": {
+      "import": {
+        "types": "./types/jsx.d.ts"
+      },
+      "require": {
+        "types": "./types/jsx.d.cts"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "unpkg": "./dist/mulling.umd.js",
+  "jsdelivr": "./dist/mulling.umd.js",
+  "files": ["dist", "types"],
+  "sideEffects": [
+    "./dist/mulling.js",
+    "./dist/mulling.cjs",
+    "./dist/mulling.umd.js",
+    "./dist/react.js",
+    "./dist/react.cjs",
+    "./dist/vue.js",
+    "./dist/vue.cjs",
+    "./src/index.ts",
+    "./src/react/index.ts",
+    "./src/vue/index.ts"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "setup": "npm ci && npm ci --prefix site",
+    "dev": "npm --prefix site run dev",
+    "build": "vite build && vite build --mode cjs && vite build -c vite.umd.config.ts && tsc -p tsconfig.build.json && node scripts/fix-dts.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "size": "size-limit",
+    "sizes": "node scripts/sizes.mjs",
+    "check:sizes": "node scripts/sizes.mjs --check",
+    "prepublishOnly": "npm run check:release && npm run check:actions && npm run lint && npm run typecheck && npm run test:types && npm test && npm run build && npm run test:types:package && npm run test:bundle && npm run test:package && npm run size && npm run check:sizes",
+    "test:types": "tsc -p test/types/tsconfig.json",
+    "test:browser": "playwright test",
+    "test:browser:update": "playwright test --update-snapshots",
+    "test:bundle": "node size/check-treeshake.mjs",
+    "test:package": "node scripts/check-package.mjs",
+    "build:site": "npm --prefix site run build",
+    "check:release": "node scripts/check-release.mjs",
+    "test:types:package": "node scripts/check-types.mjs",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "check:actions": "node scripts/check-actions.mjs",
+    "test:site": "node site/scripts/check-site.mjs"
+  },
+  "size-limit": [
+    {
+      "name": "Everything (mulling)",
+      "path": "dist/mulling.js",
+      "limit": "9.75 kB"
+    },
+    {
+      "name": "Core + one loader",
+      "path": "size/core-one-loader.js",
+      "limit": "7.5 kB"
+    },
+    {
+      "name": "Core + the three state loaders",
+      "path": "size/core-states.js",
+      "limit": "7.75 kB"
+    },
+    {
+      "name": "React component on core (React itself excluded)",
+      "path": "dist/react-core.js",
+      "ignore": ["react"],
+      "limit": "7.5 kB"
+    },
+    {
+      "name": "Vue component on core (Vue itself excluded)",
+      "path": "dist/vue-core.js",
+      "ignore": ["vue"],
+      "limit": "7.5 kB"
+    }
+  ],
+  "keywords": [
+    "ai",
+    "loader",
+    "loading",
+    "spinner",
+    "thinking-indicator",
+    "typing-indicator",
+    "streaming",
+    "accessibility",
+    "a11y",
+    "reduced-motion",
+    "web-component",
+    "react",
+    "vue"
+  ],
+  "license": "MIT",
+  "author": "YOUR NAME",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR-USERNAME/mulling.git"
+  },
+  "homepage": "https://YOUR-USERNAME.github.io/mulling/",
+  "bugs": {
+    "url": "https://github.com/YOUR-USERNAME/mulling/issues"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.49.1",
+    "@size-limit/preset-small-lib": "^11.1.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "happy-dom": "^15.11.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "size-limit": "^11.1.6",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8",
+    "vue": "^3.5.13"
+  },
+  "peerDependencies": {
+    "@types/react": ">=18",
+    "react": ">=17",
+    "vue": ">=3.3"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "@types/react": {
+      "optional": true
+    }
+  }
+}

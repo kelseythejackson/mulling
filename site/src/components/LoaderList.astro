@@ -1,0 +1,50 @@
+---
+// One section per built-in loader, from the library's own definitions.
+import { allLoaders, defaultStateLoaders } from 'mulling';
+import Loader from './Loader.astro';
+const goodFor: Record<string, string> = {
+  breath: 'Long, calm waits',
+  orbit: 'Active work',
+  tide: 'Streaming output',
+  blink: 'Friendly, personal products',
+  coil: 'Drafting, composing',
+  murmur: 'Searching, gathering',
+  scribble: 'Writing',
+  pond: 'Listening, waiting for input',
+};
+const defaultFor = (type: string) =>
+  Object.entries(defaultStateLoaders)
+    .filter(([, t]) => t === type)
+    .map(([s]) => s);
+---
+<div class="list">
+  {allLoaders.map((l) => (
+    <section class="item" aria-labelledby={l.type}>
+      <div class="not-content art site-card">
+        <Loader type={l.type} size={64} />
+        <Loader type={l.type} size={20} />
+      </div>
+      <div class="text">
+        <h3 id={l.type}>{l.name} <code>{l.type}</code></h3>
+        <p>{l.description}</p>
+        <dl class="not-content">
+          <dt>Built with</dt><dd>{l.tech === 'css' ? 'CSS' : 'Canvas'}</dd>
+          <dt>Good for</dt><dd>{goodFor[l.type] ?? '—'}</dd>
+          <dt>Reduced motion</dt><dd>{l.reducedMotion}</dd>
+          {defaultFor(l.type).length > 0 && (<><dt>Default for</dt><dd>{defaultFor(l.type).join(', ')}</dd></>)}
+        </dl>
+      </div>
+    </section>
+  ))}
+</div>
+<style>
+  .item { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1.5rem; align-items: start; padding-block: 1.25rem; border-top: 1px solid var(--sl-color-hairline); }
+  .art { display: flex; align-items: center; justify-content: space-around; height: 7rem; background: var(--sl-color-gray-6); }
+  h3 { margin: 0 !important; display: flex; gap: .6rem; align-items: baseline; }
+  h3 code { font-size: var(--sl-text-xs) !important; font-weight: 400; color: var(--sl-color-gray-3); }
+  .text p { margin: .3rem 0 .6rem !important; color: var(--sl-color-gray-3); }
+  dl { display: grid; grid-template-columns: 8rem 1fr; gap: .2rem 1rem; margin: 0; font-size: var(--sl-text-sm); }
+  dt { color: var(--sl-color-gray-3); }
+  dd { margin: 0; color: var(--sl-color-white); }
+  @media (max-width: 36rem) { .item { grid-template-columns: 1fr; } }
+</style>

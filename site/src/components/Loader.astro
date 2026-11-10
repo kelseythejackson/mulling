@@ -1,0 +1,29 @@
+---
+// A live loader for the docs. Decorative by default: demos sit next to visible captions,
+// so screen readers shouldn't announce every example on the page.
+interface Props {
+  type?: string;
+  state?: string;
+  size?: number;
+  speed?: number;
+  label?: string;
+  time?: number;
+  reducedMotion?: 'true' | 'false';
+}
+const { type, state, size = 20, speed, label, time, reducedMotion } = Astro.props;
+---
+<mulling-status
+  class="site-demo"
+  type={type}
+  state={state}
+  size={size}
+  speed={speed}
+  time={time}
+  reduced-motion={reducedMotion}
+  label={label}
+  decorative={label ? undefined : ''}
+  style={`width:${size}px;height:${size}px`}
+></mulling-status>
+<script>
+  import '../scripts/loaders.ts';
+</script>

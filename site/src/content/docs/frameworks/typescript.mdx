@@ -1,0 +1,20 @@
+---
+title: TypeScript and JSX
+description: Types ship with the package; opt in to typing <mulling-status> in JSX.
+---
+
+Types ship with the package, for every entry point and every module resolution mode, including `NodeNext`.
+
+To type `<mulling-status>` in JSX, opt in once anywhere in your project (needs `@types/react`):
+
+```ts
+import type {} from 'mulling/jsx';
+```
+
+Then this type-checks, with built-in loader names and states autocompleting:
+
+```tsx
+<mulling-status type="coil" label="Thinking" />
+```
+
+Any other loader name is accepted, so custom loaders work. Unknown states are flagged.

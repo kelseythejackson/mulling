@@ -1,0 +1,31 @@
+---
+title: Bundle size
+description: Import only the loaders you use.
+---
+
+import sizes from '../../../data/sizes.json';
+
+`import 'mulling'` gives you everything, at {sizes.everything} compressed. To ship less, import from `core` and register the loaders you want:
+
+```js
+import { mount, use } from 'mulling/core';
+import { coil, tide } from 'mulling/loaders';
+
+use(coil, tide);
+mount(el, { type: 'coil' });
+```
+
+| What you import | Compressed size |
+| --- | --- |
+| `mulling` (everything) | {sizes.everything} |
+| `core` + the three state loaders (`stateLoaders`) | {sizes.coreStates} |
+| `core` + one loader | {sizes.coreOne} |
+| `react/core` or `vue/core`, before loaders | {sizes.vueCore} |
+
+You choose which loaders to include: `use()` registers them, adding them to the list Mulling can show. Any you don't import are left out of your bundle. `core` includes the `done` and `error` endings.
+
+If a state's default loader isn't registered, Mulling shows the first registered loader instead and warns once in the console. A missing import never leaves a blank space.
+
+:::note[Register and mount with the same build]
+If your app loads both the `import` and `require()` builds, as some test runners do, each keeps its own list of loaders. Register loaders with the same one you mount them with.
+:::

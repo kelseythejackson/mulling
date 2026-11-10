@@ -1,0 +1,29 @@
+---
+title: Content Security Policy
+description: Use Mulling on pages that block inline styles.
+---
+
+No loader uses inline `style` attributes, so a `style-src` policy without `'unsafe-inline'` works.
+
+- **Web components** add no `<style>` tags: every copy shares one stylesheet.
+- **`mount()`** adds one `<style>` tag to the page, and adds each loader's styles to it the first time that loader is shown.
+
+## Nonces
+
+If your policy needs a nonce (a one-time code that allows a `<style>` tag), either:
+
+- pass `nonce` to `mount()`, or
+- set the `nonce` attribute on `<mulling-status>`.
+
+The library remembers it for every tag it adds later. With neither, it reads the nonce from `<meta property="csp-nonce" nonce="…">`, the convention Vite uses.
+
+## Ship the CSS yourself
+
+`styles` (from `mulling`) has everything, and `cssFor([coil, tide])` (from `core`) has just what those loaders need.
+
+```js
+import { cssFor } from 'mulling/core';
+import { coil, tide } from 'mulling/loaders';
+
+const css = cssFor([coil, tide]); // write this into your own stylesheet at build time
+```

@@ -1,0 +1,51 @@
+---
+title: AI states
+description: Tell people what the AI is doing. Each state has its own loader and its own words.
+---
+
+import StateRow from '../../../components/StateRow.astro';
+
+Set `state` to say what the AI is doing. Each working state has its own loader, and changes cross-fade. `done` and `error` draw a mark once and hold still.
+
+<StateRow />
+
+## Change state as the response streams
+
+Set `state` again each time the AI moves on. [Stream a response](../streaming/) wires the four changes to a real `fetch()` stream in HTML, JS, React and Vue.
+
+## What each state shows
+
+| State | Default loader | Screen readers hear |
+| --- | --- | --- |
+| `thinking` | `breath` | Thinking |
+| `searching` | `murmur` | Searching |
+| `writing` | `tide` | Writing |
+| `done` | a check mark that draws on | Done |
+| `error` | an exclamation mark that draws on | Something went wrong |
+
+:::note[Screen readers hear each change once]
+Mulling speaks every change through one hidden announcer for the whole page, so loaders never talk over each other. Several loaders changing together are combined into one announcement, and `error` interrupts other speech. See [Accessibility](../../accessibility/).
+:::
+
+## Choose loaders and words per state
+
+Pick a loader for any working state with `states`, and the words with `labels`. Both merge key by key in `update()`, so changing one keeps the others.
+
+```js
+mount(el, {
+  state: 'writing',
+  states: { writing: 'scribble' },
+  labels: { done: 'Answer ready', error: 'Upload failed' },
+});
+```
+
+On the web component, use one attribute per entry: `loader-writing="scribble"`, `label-done="Answer ready"`.
+
+## Endings
+
+`done` draws a check mark once and `error` an exclamation mark; then each holds still. Screen readers hear “Done” or “Something went wrong”.
+
+- **Removing the loader:** you can swap it for the answer straight away. The ending is still spoken.
+- **Keeping it:** a still check mark is a quiet sign that the answer is complete.
+- **Other words:** set `labels`, such as `labels: { done: 'Answer ready' }`; see above.
+- **Their color:** see [Theming and color](../theming/#endings-and-eyes).

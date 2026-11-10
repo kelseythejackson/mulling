@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2020", "DOM"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": false,
+    "baseUrl": "../..",
+    "paths": {
+      "mulling": ["src/index.ts"],
+      "mulling/jsx": ["types/jsx.d.ts"],
+      "mulling/core": ["src/core.ts"],
+      "mulling/loaders": ["src/loaders/index.ts"],
+      "mulling/react": ["src/react/index.ts"],
+      "mulling/react/core": ["src/react/core.ts"]
+    }
+  },
+  "files": ["jsx-check.tsx", "react-check.tsx"]
+}

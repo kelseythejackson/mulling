@@ -1,0 +1,41 @@
+---
+import sizes from '../data/sizes.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const items = [
+  {
+    title: 'Follows the AI',
+    body: 'Set the state and the loader cross-fades to match. Endings draw a mark once and hold still.',
+    href: '/guides/ai-states/',
+  },
+  {
+    title: 'Accessible by default',
+    body: 'One shared announcer, so loaders never talk over each other. Reduced motion and forced colors handled.',
+    href: '/accessibility/',
+  },
+  {
+    title: 'Works anywhere',
+    body: 'React, Vue, a web component for everything else, or one function call. No dependencies.',
+    href: '/frameworks/web-component/',
+  },
+  {
+    title: 'Cheap to run',
+    body: `Canvas loaders share one animation loop and stop drawing off-screen. ${sizes.coreOne} with one loader.`,
+    href: '/guides/bundle-size/',
+  },
+];
+---
+<ul class="not-content features" role="list">
+  {items.map((f) => (
+    <li><a href={`${base}${f.href}`}><span class="t">{f.title}</span><span class="b">{f.body}</span><span class="more" aria-hidden="true">→</span></a></li>
+  ))}
+</ul>
+<style>
+  .features { list-style: none; padding: 0; margin: 4rem 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  a { display: flex; flex-direction: column; gap: .4rem; height: 100%; padding: 1.1rem 1.1rem 1rem; border: 1px solid var(--sl-color-hairline); border-radius: 12px; text-decoration: none; transition: border-color .15s ease; }
+  a:hover { border-color: var(--sl-color-gray-4); }
+  .t { color: var(--sl-color-white); font-weight: 600; font-size: var(--sl-text-sm); }
+  .b { color: var(--sl-color-gray-3); font-size: var(--sl-text-sm); line-height: 1.55; }
+  .more { margin-top: auto; color: var(--sl-color-gray-3); }
+  @media (max-width: 56rem) { .features { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 30rem) { .features { grid-template-columns: 1fr; } }
+</style>

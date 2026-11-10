@@ -1,0 +1,15 @@
+---
+title: Stability
+description: What semantic versioning covers in Mulling.
+---
+
+Mulling follows [semantic versioning](https://semver.org/). From 1.0, these only change in a major version:
+
+- **Exports:** every name exported from each entry point. A test fails if one is added, removed or renamed, so changes are always deliberate.
+- **Options and attributes:** their names, accepted values and defaults.
+- **What screen readers hear:** default labels and how changes are announced.
+- **Built-in loaders:** none are removed or renamed, and each one's shape and motion stay recognizable. Minor versions may refine details; the screenshot tests make every such change visible in review.
+- **Browser support:** current versions of Chrome, Edge, Firefox and Safari.
+- **Custom properties and the custom-loader contract:** `--mulling-done`, `--mulling-error` and `--mulling-eye`, which you set, and `--mulling-color`, `--mulling-duration` and the `mulling-animate` class, which custom loaders use.
+
+Adding loaders, options or exports is a minor change. Other CSS class names inside loaders are internal and may change in any release.

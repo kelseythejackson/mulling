@@ -1,0 +1,79 @@
+---
+// A pretend AI response, so readers can see the whole flow before writing any code:
+// thinking → searching → writing (words stream in) → done, or error.
+import Loader from './Loader.astro';
+---
+<div class="not-content stream site-card" data-stream>
+  <div class="answer">
+    <p class="status"><span class="slot" data-stream-slot hidden><Loader state="thinking" size={20} label="Thinking" /></span><span data-stream-status>Press “Ask” to start.</span></p>
+    <p class="text" data-stream-text></p>
+  </div>
+  <div class="bar">
+    <button type="button" class="btn" data-stream-ask>Ask</button>
+    <button type="button" class="btn ghost" data-stream-fail>Ask, then fail</button>
+    <code class="now" data-stream-now></code>
+  </div>
+</div>
+
+<style>
+  .stream { overflow: hidden; margin-block: 1rem; }
+  .answer { padding: 1rem 1.1rem; min-height: 6.5rem; }
+  .status { display: flex; align-items: center; gap: 0.6rem; margin: 0; font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+  .status :global(mulling-status) { color: var(--site-accent); }
+  .text { margin: 0.6rem 0 0; font-size: var(--sl-text-sm); color: var(--sl-color-white); }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; border-top: 1px solid var(--sl-color-hairline); background: var(--sl-color-gray-6); }
+  .btn { all: unset; cursor: pointer; font-size: var(--sl-text-xs); font-weight: 500; padding: 4px 12px; border-radius: 6px; background: var(--sl-color-white); color: var(--sl-color-black); }
+  .btn.ghost { background: none; color: var(--sl-color-white); border: 1px solid var(--sl-color-gray-4); }
+  .btn:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+  .btn[aria-disabled='true'] { opacity: 0.5; cursor: default; }
+  .slot { display: inline-flex; }
+  .slot[hidden] { display: none; }
+  .now { margin-left: auto; font-family: var(--__sl-font-mono); font-size: var(--sl-text-2xs); color: var(--sl-color-gray-3); background: none; border: 0; padding: 0; }
+</style>
+
+<script>
+  const words = 'Mulling shows each step with its own loader, and screen readers hear every change once.'.split(' ');
+  const steps = { thinking: 'Thinking about your question', searching: 'Searching 3 sources', writing: 'Writing the answer', done: 'Answer ready', error: 'Something went wrong' } as const;
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-stream]')) {
+    const loader = root.querySelector('mulling-status')!;
+    const status = root.querySelector('[data-stream-status]')!;
+    const text = root.querySelector('[data-stream-text]')!;
+    const now = root.querySelector('[data-stream-now]')!;
+    const buttons = root.querySelectorAll<HTMLButtonElement>('button');
+    const slot = root.querySelector<HTMLElement>('[data-stream-slot]')!;
+    let running = false;
+    const set = (state: keyof typeof steps) => {
+      loader.setAttribute('state', state);
+      loader.setAttribute('label', steps[state]);
+      status.textContent = steps[state];
+      now.textContent = `state="${state}"`;
+    };
+    // aria-disabled, not disabled: disabling the focused button would drop keyboard focus to the page.
+    const run = async (fail: boolean) => {
+      if (running) return;
+      running = true;
+      for (const b of buttons) b.setAttribute('aria-disabled', 'true');
+      slot.hidden = false;
+      text.textContent = '';
+      set('thinking');
+      await wait(1400);
+      set('searching');
+      await wait(1600);
+      if (fail) set('error');
+      else {
+        set('writing');
+        for (const w of words) {
+          text.textContent += `${w} `;
+          await wait(90);
+        }
+        set('done');
+      }
+      for (const b of buttons) b.removeAttribute('aria-disabled');
+      running = false;
+    };
+    root.querySelector('[data-stream-ask]')!.addEventListener('click', () => run(false));
+    root.querySelector('[data-stream-fail]')!.addEventListener('click', () => run(true));
+  }
+</script>

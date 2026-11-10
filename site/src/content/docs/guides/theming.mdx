@@ -1,0 +1,36 @@
+---
+title: Theming and color
+description: Loaders follow your text color, and pick up theme changes on their own.
+---
+
+import Loader from '../../../components/Loader.astro';
+
+Loaders use `currentColor` by default, so they match the text around them. Pass `color` to choose another: any CSS color works, including `var(--brand)`, `oklch()` and `color-mix()`.
+
+```js
+mount(el, { color: 'var(--brand)' });
+```
+
+```html
+<mulling-status color="oklch(62% 0.19 264)"></mulling-status>
+```
+
+## Theme changes
+
+Theme changes are picked up automatically when they come from:
+
+- a class or `data-theme`, `data-mode` or `data-color-scheme` attribute on `<html>` or `<body>`, including a `<body>` replaced by a page-swap tool such as Turbo;
+- the system light or dark setting;
+- forced-colors mode, such as Windows High Contrast, where system colors are used instead;
+- the end of a color transition on `<html>` or `<body>`, so a theme that fades doesn't leave canvas loaders in the old color.
+
+If your theme changes some other way, call `refresh()` on the loader (or on the `<mulling-status>` element).
+
+## Endings and eyes
+
+- `done` and `error` draw in `--mulling-done` and `--mulling-error`, defaulting to the loader color.
+- The `blink` loader picks white or near-black eyes, whichever contrasts more with its body. To choose yourself, set `--mulling-eye`, for example `--mulling-eye: var(--surface)`.
+
+:::caution[Style loaders through options, not class names]
+The class names inside loaders are internal and may change in any release. Use `color`, `size` and the custom properties on this page instead.
+:::

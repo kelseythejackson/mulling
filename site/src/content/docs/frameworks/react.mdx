@@ -1,0 +1,32 @@
+---
+title: React
+description: The Mulling component, for React 17 and later.
+---
+
+import sizes from '../../../data/sizes.json';
+
+```tsx
+import { Mulling } from 'mulling/react';
+
+export function Status({ status }) {
+  return <Mulling state={status} />;
+}
+```
+
+- **Props:** every `mount()` option is a prop (see [Options](../../reference/options/)), plus `className`, `style` and `id`.
+- **Pass-through:** `data-*` props, such as `data-testid`, go on the wrapper element. `aria-*` props, such as `aria-describedby`, go on the loader's labelled element, where screen readers read them. Use `label` rather than `aria-label`.
+- **Ref:** gives you `update()`, `refresh()` and `element`.
+- **Server rendering:** it renders an empty, correctly sized `<span>` on the server and mounts in the browser, so nothing shifts.
+- **StrictMode:** supported, including its double mount.
+
+## Smaller bundles
+
+`mulling/react` registers every loader. For the smallest bundle, use `mulling/react/core` and register the loaders you need with `use()`: {sizes.reactCore} plus your loaders, not counting React.
+
+```tsx
+import { Mulling } from 'mulling/react/core';
+import { use } from 'mulling/core';
+import { stateLoaders } from 'mulling/loaders';
+
+use(...stateLoaders);
+```

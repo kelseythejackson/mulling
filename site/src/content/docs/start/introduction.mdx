@@ -1,0 +1,28 @@
+---
+title: Introduction
+description: What Mulling is, when it fits, and when something else will serve you better.
+---
+
+import StateRow from '../../../components/StateRow.astro';
+
+Mulling is a set of small “working on it” animations for AI interfaces. Tell it what the AI is doing (thinking, searching, writing, done or error) and it cross-fades to match.
+
+<StateRow />
+
+## When Mulling fits
+
+- **An AI response that takes a few seconds and has stages.** People see the AI thinking, then searching, then writing, instead of one spinner.
+- **Interfaces that must be accessible.** Screen readers hear each change once, the calm version respects reduced motion, and loaders stay visible in high-contrast modes.
+- **Any stack.** React, Vue, a web component for everything else (Svelte, Angular, plain HTML), or one script tag. No dependencies.
+
+## When something else will serve you better
+
+- **You know how far along the work is.** If you can show a percentage, use a progress bar, such as the `<progress>` element.
+- **The wait is under about a second.** A loader that appears and vanishes at once is more distracting than none.
+- **You're loading a page or layout, not waiting on an AI.** A skeleton that previews the content's shape tells people more.
+
+## Where to go next
+
+- [Install it](../installation/), then follow the [quick start](../quick-start/).
+- Not sure which loader to use? See [Choosing a loader](../../guides/choosing/), then try them in the [Loaders and playground](../../guides/loaders/) page.
+- Using React or Vue? Go straight to [React](../../frameworks/react/) or [Vue](../../frameworks/vue/).

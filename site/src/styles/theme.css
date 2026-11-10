@@ -1,0 +1,273 @@
+/* Design direction A, "Quiet Instrument": monochrome, one accent, hairline borders, Geist.
+   Every text color below meets WCAG AA (4.5:1) on every surface it's used on; see the contrast check in
+   site/scripts/check-site.mjs, which runs axe on the built pages. */
+
+@font-face {
+  font-family: Geist;
+  src: url("../fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Dark (Starlight's default block) */
+:root {
+  --sl-font: Geist, system-ui, sans-serif;
+  --sl-font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --sl-color-white: #ffffff; /* headings */
+  --sl-color-gray-1: #ededed;
+  --sl-color-gray-2: #d4d4d4; /* body text, 13.6:1 */
+  --sl-color-gray-3: #a1a1a1; /* muted text, 7.0:1 */
+  --sl-color-gray-4: #6b6b6b;
+  --sl-color-gray-5: #262626; /* hairlines */
+  --sl-color-gray-6: #111111; /* surfaces */
+  --sl-color-black: #0a0a0a; /* page */
+
+  --sl-color-accent-low: #1a2145;
+  --sl-color-accent: #8ea2ff;
+  --sl-color-accent-high: #c2ccff;
+
+  --sl-color-bg-nav: #0a0a0a;
+  --sl-color-bg-sidebar: #0a0a0a;
+  --sl-color-bg-inline-code: #161616;
+  --sl-color-hairline: #262626;
+  --sl-color-hairline-light: #262626;
+
+  --site-code-bg: #161616;
+  --site-accent: #8ea2ff; /* the color every demo loader is drawn in */
+  --site-surface: #111111;
+  --site-radius: 12px;
+
+  --sl-text-h1: 2.5rem;
+  --sl-text-h2: 1.6rem;
+  --sl-text-h3: 1.25rem;
+  --sl-line-height: 1.7;
+  --sl-content-width: 46rem;
+}
+
+:root[data-theme="light"] {
+  --sl-color-white: #0a0a0a;
+  --sl-color-gray-1: #171717;
+  --sl-color-gray-2: #262626; /* body text, 15.1:1 */
+  --sl-color-gray-3: #666666; /* muted text, 5.7:1 */
+  --sl-color-gray-4: #a3a3a3;
+  --sl-color-gray-5: #eaeaea; /* hairlines */
+  --sl-color-gray-6: #fafafa; /* surfaces */
+  --sl-color-gray-7: #fafafa;
+  --sl-color-black: #ffffff;
+
+  --sl-color-accent-low: #e8ecfb;
+  --sl-color-accent: #3b5bdb;
+  --sl-color-accent-high: #2f4ab8; /* links, 7.0:1 */
+
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #ffffff;
+  --sl-color-bg-inline-code: #f5f5f5;
+  --sl-color-hairline: #eaeaea;
+  --sl-color-hairline-light: #eaeaea;
+
+  --site-code-bg: #f7f7f7;
+  --site-accent: #3b5bdb;
+  --site-surface: #fafafa;
+}
+
+/* ---------- Type ---------- */
+body {
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01";
+}
+.sl-markdown-content :is(h1, h2, h3, h4),
+h1#_top {
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+h1#_top {
+  letter-spacing: -0.035em;
+}
+.sl-markdown-content code:not(pre code) {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 5px;
+  padding: 0.05em 0.35em;
+  font-size: 0.86em;
+}
+
+/* ---------- Chrome ---------- */
+header.header {
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+.site-title img {
+  width: 18px;
+  height: 18px;
+}
+.site-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-size: 1rem;
+  color: var(--sl-color-white);
+}
+/* Sidebar group labels: small and muted, so the page links carry the weight. */
+nav.sidebar .group-label .large {
+  font-size: var(--sl-text-xs);
+  font-weight: 500;
+  color: var(--sl-color-gray-3);
+  letter-spacing: 0;
+}
+nav.sidebar .top-level > li + li {
+  margin-top: 0.4rem;
+}
+nav.sidebar a[aria-current="page"],
+nav.sidebar a[aria-current="page"]:hover {
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+  font-weight: 500;
+  box-shadow: inset 2px 0 0 var(--sl-color-accent);
+}
+:root[data-theme="light"] nav.sidebar a[aria-current="page"] {
+  background: #f5f5f5;
+}
+.right-sidebar {
+  border-inline-start: 1px solid var(--sl-color-hairline);
+}
+#starlight__on-this-page {
+  font-size: var(--sl-text-xs);
+  font-weight: 500;
+  color: var(--sl-color-white);
+}
+starlight-toc a[aria-current="true"] {
+  color: var(--sl-color-white);
+  box-shadow: inset 1px 0 0 var(--sl-color-white);
+}
+
+/* Focus: a 2px accent ring with a gap, everywhere. */
+:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Shared demo pieces ---------- */
+.site-demo {
+  color: var(--site-accent);
+}
+.site-card {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--site-radius);
+  background: var(--sl-color-black);
+}
+.site-paused-notice {
+  position: fixed;
+  inset-inline-start: 1rem;
+  inset-block-end: 1rem;
+  z-index: calc(var(--sl-z-index-menu, 90) + 1);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem 0.5rem 0.9rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 10px;
+  background: var(--sl-color-black);
+  color: var(--sl-color-white);
+  font-size: var(--sl-text-xs);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
+}
+.site-paused-notice button {
+  all: unset;
+  cursor: pointer;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--sl-color-white);
+  color: var(--sl-color-black);
+  font-weight: 500;
+}
+.site-paused-notice button:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+.site-result {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--sl-color-gray-4);
+  border-radius: var(--site-radius);
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+.site-seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 8px;
+  font-size: var(--sl-text-xs);
+}
+.site-seg button {
+  all: unset;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--sl-color-gray-3);
+}
+.site-seg button[aria-pressed="true"],
+.site-seg button[aria-checked="true"] {
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+  box-shadow: 0 0 0 1px var(--sl-color-hairline);
+}
+.site-seg button:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 1px;
+}
+
+/* Motion: the site's own transitions follow the same rule the library does. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Landing page */
+.section-sub {
+  color: var(--sl-color-gray-3);
+  margin-top: 0.25rem !important;
+  margin-bottom: 1.5rem;
+}
+
+/* The landing page has the sidebar only for its mobile menu (see src/routeData.ts). On wide screens,
+   hide it and give the page the full splash width, as if it had no sidebar. */
+@media (min-width: 50rem) {
+  html[data-has-hero] .sidebar {
+    display: none;
+  }
+  html[data-has-hero] {
+    --sl-content-inline-start: 0rem;
+  }
+}
+html[data-has-hero] {
+  --sl-content-width: 67.5rem;
+}
+
+/* Long lines (the CDN URL, imports) were cut off on phones with no sign there was more: wrap them instead. */
+@media (max-width: 50rem) {
+  .expressive-code .ec-line .code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Inline code names like --mulling-done must not wrap at their hyphens ("--tl-" / "done").
+   Wide screens only: on phones a long name still needs to wrap rather than run off the edge.
+   Not in table cells, where a long default value would force the whole table wider. */
+@media (min-width: 50rem) {
+  .sl-markdown-content :not(pre, td, th) > code {
+    white-space: nowrap;
+  }
+}

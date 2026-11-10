@@ -1,0 +1,95 @@
+---
+title: Quick start
+description: Show a loader that follows what your AI is doing, in a few lines.
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+import StreamDemo from '../../../components/StreamDemo.astro';
+
+<Steps>
+
+1. **Add a loader** where the answer will appear.
+
+   <Tabs syncKey="framework">
+   <TabItem label="HTML">
+   No build step needed: paste this into any HTML page.
+
+   ```html
+   <script src="https://cdn.jsdelivr.net/npm/mulling@1/dist/mulling.umd.js"></script>
+   <script>Mulling.defineElement();</script>
+
+   <mulling-status state="thinking"></mulling-status>
+   ```
+   </TabItem>
+   <TabItem label="JS">
+   After `npm install mulling`, with a bundler such as Vite:
+
+   ```js
+   import { mount } from 'mulling';
+
+   const loader = mount(document.querySelector('#status'), { state: 'thinking' });
+   ```
+   </TabItem>
+   <TabItem label="React">
+   ```tsx
+   import { Mulling } from 'mulling/react';
+
+   <Mulling state={status} />
+   ```
+   </TabItem>
+   <TabItem label="Vue">
+   ```vue
+   <script setup>
+   import { Mulling } from 'mulling/vue';
+   </script>
+
+   <template>
+     <Mulling :state="status" />
+   </template>
+   ```
+   </TabItem>
+   </Tabs>
+
+2. **Change the state** as your AI works: `thinking`, `searching`, `writing`, then `done` or `error`. The loader cross-fades between them, and screen readers hear each change once.
+
+   <Tabs syncKey="framework">
+   <TabItem label="HTML">
+   ```js
+   const loader = document.querySelector('mulling-status');
+   loader.setAttribute('state', 'writing'); // when the first words arrive
+   ```
+   </TabItem>
+   <TabItem label="JS">
+   ```js
+   loader.update({ state: 'writing' }); // when the first words arrive
+   ```
+   </TabItem>
+   <TabItem label="React">
+   ```tsx
+   const [status, setStatus] = useState('thinking');
+   // when the first words arrive:
+   setStatus('writing');
+   ```
+   </TabItem>
+   <TabItem label="Vue">
+   ```js
+   const status = ref('thinking');
+   // when the first words arrive:
+   status.value = 'writing';
+   ```
+   </TabItem>
+   </Tabs>
+
+   Try it: this is a pretend response going through every state.
+
+   <StreamDemo />
+
+3. **Swap in the answer** when it's ready. “Done” is still spoken after the loader is removed; see [Endings](../../guides/ai-states/#endings).
+
+</Steps>
+
+That's all most apps need. Next:
+
+- [Stream a response](../../guides/streaming/): the whole flow wired to a real `fetch()`, with errors handled.
+- [AI states](../../guides/ai-states/): pick the loader and words for each state.
+- [Loaders and playground](../../guides/loaders/#playground): try every option and copy the code.

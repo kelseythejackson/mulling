@@ -1,0 +1,57 @@
+---
+// Every built-in loader, from the library itself, so the gallery can never fall out of date.
+import { allLoaders } from 'mulling';
+import Loader from './Loader.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<ul class="not-content gallery" role="list">
+  {allLoaders.map((l) => (
+    <li class="tile">
+      <div class="art"><Loader type={l.type} size={48} /></div>
+      <span class="try" aria-hidden="true">Try it →</span>
+      <div class="meta">
+        <!-- The name is the link; its ::after stretches over the whole tile, so the tile is one click target. -->
+        <a class="name" href={`${base}/guides/loaders/?loader=${l.type}#playground`}>{l.name}<span class="sr-only">: try it in the playground</span></a>
+        <span class="tech">{l.tech}</span>
+        <button type="button" class="copy" data-copy={`<mulling-status type="${l.type}"></mulling-status>`} aria-label={`Copy the ${l.name} snippet`}>Copy</button>
+      </div>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .gallery { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--sl-color-hairline); border-radius: 12px; overflow: hidden; }
+  .tile { position: relative; display: flex; flex-direction: column; height: 10.5rem; border-right: 1px solid var(--sl-color-hairline); border-bottom: 1px solid var(--sl-color-hairline); transition: background-color .15s ease; }
+  .tile:nth-child(4n) { border-right: 0; }
+  .tile:nth-last-child(-n + 4) { border-bottom: 0; }
+  .tile:hover, .tile:focus-within { background: var(--sl-color-gray-6); }
+  .art { flex: 1; display: grid; place-items: center; color: var(--site-accent); }
+  .name::after { content: ''; position: absolute; inset: 0; }
+  .name { text-decoration: none; }
+  .name:focus-visible { outline: none; }
+  .tile:has(.name:focus-visible) { outline: 2px solid var(--sl-color-accent); outline-offset: -3px; }
+  /* Shown on hover and keyboard focus only: the highlighted tile already says it's clickable. */
+  .try { position: absolute; top: .75rem; right: 1rem; font-size: var(--sl-text-2xs); color: var(--sl-color-accent-high); opacity: 0; transition: opacity .15s ease; }
+  .tile:hover .try, .tile:focus-within .try { opacity: 1; }
+  .meta { display: flex; align-items: center; gap: .5rem; padding: 0 1rem .9rem; font-size: var(--sl-text-sm); }
+  .name { color: var(--sl-color-white); }
+  .tech { color: var(--sl-color-gray-3); font-family: var(--__sl-font-mono); font-size: var(--sl-text-2xs); }
+  .copy { all: unset; position: relative; z-index: 1; cursor: pointer; margin-left: auto; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); padding: 2px 8px; border-radius: 6px; border: 1px solid transparent; }
+  .tile:hover .copy, .copy:focus-visible { color: var(--sl-color-accent-high); border-color: var(--sl-color-gray-4); }
+  .copy:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 1px; }
+  @media (hover: none) { .copy { color: var(--sl-color-accent-high); } }
+  @media (max-width: 50rem) {
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+    .tile:nth-child(4n) { border-right: 1px solid var(--sl-color-hairline); }
+    .tile:nth-child(2n) { border-right: 0; }
+    .tile:nth-last-child(-n + 4) { border-bottom: 1px solid var(--sl-color-hairline); }
+    .tile:nth-last-child(-n + 2) { border-bottom: 0; }
+  }
+</style>
+
+<script>
+  import { copyText } from '../scripts/copy.ts';
+  for (const b of document.querySelectorAll<HTMLButtonElement>('.gallery [data-copy]')) {
+    b.addEventListener('click', () => copyText(b, b.dataset.copy ?? ''));
+  }
+</script>

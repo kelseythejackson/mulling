@@ -1,0 +1,15 @@
+node_modules/
+dist/
+site/dist/
+site/.astro/
+# Generated from the source by starlight-typedoc on every site build.
+site/src/content/docs/api/
+*.log
+.DS_Store
+test-results/
+playwright-report/
+types/jsx.d.cts
+# Local settings (see .env.example)
+.env
+.env.*
+!.env.example

@@ -1,0 +1,47 @@
+---
+title: Make your own loader
+description: A loader is one plain object, passed to use().
+---
+
+A loader is one plain object, passed to `use()`. Registering a name that already exists replaces it, which is how you override a built-in; mounted loaders switch to the new definition straight away.
+
+## Canvas loaders
+
+A canvas loader is a paint function: Mulling calls it on every frame to draw the loader. Mulling handles the rest: timing, sizing, color, frame-rate caps, pausing off-screen and reduced motion.
+
+```js
+import { use, mount } from 'mulling/core';
+
+use({
+  type: 'ripple',
+  name: 'Ripple',
+  tech: 'canvas',
+  description: 'One ring growing from the center.',
+  reducedMotion: 'A still ring that fades.',
+  paint(ctx, size, seconds, color) {
+    const r = (size / 2) * ((seconds * 0.8) % 1);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = size * 0.06;
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, r, 0, Math.PI * 2);
+    ctx.stroke();
+  },
+});
+
+mount(el, { type: 'ripple' });
+```
+
+A paint function that throws is stopped and reported once in the console. The other loaders on the page keep running.
+
+## CSS loaders
+
+A CSS loader is markup plus styles: `tech: 'css'`, with `html`, `css` and `base`, the length of one cycle in seconds. Its styles are added to the page the first time it's shown.
+
+- Use `var(--mulling-color)` for color and `var(--mulling-duration)` for timing.
+- Add the class `mulling-animate` to every animated element, so the calm reduced-motion version applies.
+- Don't hard-code colors: forced-colors mode only adjusts `var(--mulling-color)`.
+- Don't use inline `style` attributes; strict Content Security Policies block them.
+
+Each built-in loader in `src/loaders/` is a complete example.
+
+Upgrading a loader written before 1.0? See [Upgrade to 1.0](../../reference/migrating/).

@@ -1,0 +1,63 @@
+---
+title: Choosing a loader
+description: Which loader suits which moment, and how to size, color and word it.
+---
+
+import StateRow from '../../../components/StateRow.astro';
+
+Start from what the AI is doing: each state already has a loader that fits. Then check four things: size, color, motion and the words screen readers hear.
+
+<StateRow />
+
+## Start from the state
+
+| State | Default | Why it fits | Worth trying instead |
+| --- | --- | --- | --- |
+| Thinking | Breath | A slow swell for a wait of unknown length | Orbit, if the work should feel busier |
+| Searching | Murmur | Dots gathering together, like sources being collected | Orbit |
+| Writing | Tide | Bars rising like a voice level, for text streaming in | Scribble or Coil, which draw as they go |
+| Done, Error | A check mark, an exclamation mark | Drawn once, then still | No choice: endings always use their marks |
+
+Change any working state's loader with the `states` option (attributes `loader-thinking`, `loader-searching`, `loader-writing`). [Loaders and playground](../loaders/) shows all eight, each with what it's good for.
+
+## Match the product
+
+- **Calm, professional tools:** Breath, a slow swell, is the calmest of the eight.
+- **Friendly, personal products:** Blink is a small character with eyes that glance and blink.
+- **Voice and listening:** Pond's rings spread from a pulsing center, for listening or waiting for input.
+- **One look across states:** use the same loader for every working state and let the words carry the change.
+
+## Size
+
+- **Next to text,** such as a status line: 16–24px, close to the text's height. The default is 20px.
+- **As the focus of an empty area,** such as a blank answer panel: 48–96px.
+- Orbit keeps its dots a minimum size, so all three stay visible down to 16px.
+- `size` is a number of pixels, up to 1024. No units: `24`, not `'24px'`.
+
+## Color and contrast
+
+- **By default, loaders use the text color around them** (`currentColor`), so they pass whatever contrast your text passes.
+- **A custom color needs at least 3:1 contrast** against the background behind it. WCAG 1.4.11 asks this of graphics. The [playground](../loaders/#playground) shows the ratio as you pick.
+- **Endings can have their own colors,** such as green for done and red for error: see [Theming and color](../theming/#endings-and-eyes). The check mark and exclamation mark differ in shape too, so color is never the only signal.
+
+## Motion
+
+- **Every loader has a calm version** that fades between 80% and 100% opacity instead of moving. People who turn on reduced motion in their system settings see it automatically. Preview it in the playground with “Reduced motion: Always calm”.
+- **`speed`** changes the pace: `0.5` is half speed, `2` is double. Slower reads as calmer.
+- **For waits that can run past 5 seconds** next to other content, give people a way to pause the animation; see [Accessibility](../../accessibility/#motion).
+
+## Words
+
+Screen readers say a loader's words each time its state changes, so make them describe the work:
+
+| Instead of | Write |
+| --- | --- |
+| Loading | Searching 14 sources |
+| Please wait | Writing the answer |
+| Done | Answer ready |
+
+Set them with `labels` (attributes `label-thinking`, `label-done` and so on). If visible text next to the loader already says what's happening, mark the loader decorative so it isn't read twice; see [Accessibility](../../accessibility/#what-your-app-should-do).
+
+## Handing off
+
+The [playground](../loaders/#playground) writes the code for whatever you set up, in HTML, JS, React or Vue. Paste it into your spec or ticket: the option names match the [Options](../../reference/options/) page exactly.

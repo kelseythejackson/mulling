@@ -1,0 +1,111 @@
+---
+// The landing page's hero: one large loader that steps through the AI states once, then waits.
+import pkg from '../../../package.json';
+import Loader from './Loader.astro';
+import sizes from '../data/sizes.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const snippet = `<script src="https://cdn.jsdelivr.net/npm/mulling@1/dist/mulling.umd.js"></script>
+<script>Mulling.defineElement();</script>
+
+<mulling-status state="thinking"></mulling-status>`;
+const states = [
+  { id: 'thinking', label: 'Thinking', status: 'Thinking about your question' },
+  { id: 'searching', label: 'Searching', status: 'Searching 14 sources' },
+  { id: 'writing', label: 'Writing', status: 'Writing the answer' },
+  { id: 'done', label: 'Done', status: 'Answer ready' },
+  { id: 'error', label: 'Error', status: 'Something went wrong' },
+];
+---
+<section class="hero not-content">
+  <div class="copy">
+    <p class="eyebrow"><span class="pill">v{pkg.version}</span> Stable API · {sizes.everything} · no dependencies</p>
+    <h1 id="_top">Show what the AI is working on, not just that it’s busy.</h1>
+    <p class="lede">Thinking, searching, writing, done. Each step has its own loader, and screen readers hear every change once.</p>
+    <div class="cta">
+      <a class="btn primary" href={`${base}/start/quick-start/`}>Get started</a>
+      <span class="install"><code>&lt;script src="…/mulling@1"&gt;</code><button type="button" class="copy-btn" data-copy={snippet} aria-label="Copy the script tag snippet for any HTML page">Copy</button></span>
+      <a class="alt" href={`${base}/start/installation/#use-a-package-manager`}>or <code>npm i mulling</code></a>
+    </div>
+  </div>
+
+  <div class="stage site-card" data-stage>
+    <div class="view">
+      <span class="tag" data-stage-tag>96px · thinking</span>
+      <Loader state="thinking" size={96} />
+    </div>
+    <div class="bar">
+      <div class="site-seg" role="radiogroup" aria-label="AI state" data-state-group>
+        {states.map((s, i) => <button type="button" role="radio" data-state={s.id} data-status={s.status} aria-checked={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{s.label}</button>)}
+      </div>
+      <p class="status"><Loader state="thinking" size={16} /><span data-stage-status>{states[0].status}</span></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 4rem; align-items: center; padding: 4.5rem 0 4rem; }
+  .eyebrow { display: flex; gap: .5rem; align-items: center; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); }
+  .pill { border: 1px solid var(--sl-color-gray-4); border-radius: 99px; padding: 1px 9px; color: var(--sl-color-white); }
+  h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.04; letter-spacing: -.04em; font-weight: 600; color: var(--sl-color-white); margin: 1.1rem 0; }
+  .lede { font-size: var(--sl-text-lg); color: var(--sl-color-gray-3); max-width: 31rem; }
+  .cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; align-items: center; }
+  .btn { display: inline-flex; align-items: center; height: 2.5rem; padding: 0 1.1rem; border-radius: 8px; font-weight: 500; font-size: var(--sl-text-sm); text-decoration: none; }
+  .btn.primary { background: var(--sl-color-white); color: var(--sl-color-black); }
+  .btn.primary:hover { opacity: .88; }
+  .install { display: inline-flex; align-items: center; gap: .75rem; height: 2.5rem; padding: 0 .4rem 0 .9rem; border: 1px solid var(--sl-color-gray-4); border-radius: 8px; background: var(--sl-color-gray-6); }
+  .install code { font-family: var(--__sl-font-mono); font-size: var(--sl-text-xs); color: var(--sl-color-white); }
+  .alt { font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); text-decoration: underline; text-underline-offset: 3px; }
+  .alt:hover { color: var(--sl-color-white); }
+  .alt code { font-family: var(--__sl-font-mono); font-size: inherit; background: none; padding: 0; }
+  .copy-btn { all: unset; cursor: pointer; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); padding: 3px 8px; border-radius: 6px; }
+  .copy-btn:hover { color: var(--sl-color-white); background: var(--sl-color-black); }
+  .copy-btn:focus-visible { outline: 2px solid var(--sl-color-accent); }
+  .stage { overflow: hidden; background: var(--sl-color-gray-6); }
+  .view { position: relative; height: 18rem; display: grid; place-items: center; color: var(--site-accent);
+    background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--site-accent) 8%, transparent), transparent 60%); }
+  .tag { position: absolute; left: 1rem; top: .75rem; font-family: var(--__sl-font-mono); font-size: var(--sl-text-2xs); color: var(--sl-color-gray-3); }
+  .bar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between; padding: .8rem 1rem; border-top: 1px solid var(--sl-color-hairline); background: var(--sl-color-black); }
+  .status { display: flex; align-items: center; gap: .5rem; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); margin: 0; color: var(--sl-color-gray-3); }
+  .status :global(mulling-status) { color: var(--site-accent); }
+  @media (max-width: 56rem) { .hero { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 2.5rem; } }
+</style>
+
+<script>
+  import { copyText } from '../scripts/copy.ts';
+  import { sitePaused } from '../scripts/loaders.ts';
+  import { radioGroup } from '../scripts/radio.ts';
+
+  for (const b of document.querySelectorAll<HTMLButtonElement>('.hero [data-copy]')) b.addEventListener('click', () => copyText(b, b.dataset.copy ?? ''));
+
+  const stage = document.querySelector<HTMLElement>('[data-stage]');
+  if (stage) {
+    const buttons = [...stage.querySelectorAll<HTMLButtonElement>('[data-state]')];
+    const loaders = stage.querySelectorAll('mulling-status');
+    const tag = stage.querySelector('[data-stage-tag]')!;
+    const status = stage.querySelector('[data-stage-status]')!;
+    const show = (b: HTMLButtonElement) => {
+      group.check(b);
+      for (const l of loaders) l.setAttribute('state', b.dataset.state!);
+      tag.textContent = `96px · ${b.dataset.state}`;
+      status.textContent = b.dataset.status!;
+    };
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const group = radioGroup(stage.querySelector<HTMLElement>('[data-state-group]')!, (b) => {
+      clearTimeout(timer);
+      show(b);
+    });
+
+    // Plays through thinking → done once, then waits. Not under reduced motion, or when animations are paused.
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches || sitePaused();
+    if (!calm) {
+      let i = 0;
+      const step = () => {
+        i += 1;
+        if (i > 3) return;
+        show(buttons[i]);
+        timer = setTimeout(step, 2200);
+      };
+      timer = setTimeout(step, 2200);
+    }
+  }
+</script>

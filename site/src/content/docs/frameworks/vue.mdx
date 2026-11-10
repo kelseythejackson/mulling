@@ -1,0 +1,24 @@
+---
+title: Vue
+description: The Mulling component, for Vue 3.3 and later.
+---
+
+import sizes from '../../../data/sizes.json';
+
+```vue
+<script setup>
+import { Mulling } from 'mulling/vue';
+defineProps(['status']);
+</script>
+
+<template>
+  <Mulling :state="status" />
+</template>
+```
+
+- **Props:** the `mount()` options, kebab-case in templates (`reduced-motion`, `max-fps`). See [Options](../../reference/options/).
+- **Attributes:** `class`, `style` and `data-*` go on the wrapper element; `aria-*` attributes go on the loader's labelled element.
+- **Template ref:** gives you `update()`, `refresh()` and `element`.
+- **Server rendering:** renders a correctly sized placeholder on the server.
+
+For the smallest bundle, use `mulling/vue/core` and register loaders with `use()`: {sizes.vueCore} plus your loaders, not counting Vue.

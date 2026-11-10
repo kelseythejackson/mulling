@@ -1,0 +1,56 @@
+---
+title: Installation
+description: Add one script tag to any HTML page, or install from npm.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Loader from '../../../components/Loader.astro';
+
+## Add a script tag
+
+No build step, no install. Paste this into any HTML page:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/mulling@1/dist/mulling.umd.js"></script>
+<script>Mulling.defineElement();</script>
+
+<mulling-status state="thinking"></mulling-status>
+```
+
+You should see this:
+
+<p class="site-result"><Loader state="thinking" size={24} /> <span>A loader appears where you put the tag.</span></p>
+
+`@1` always loads the newest 1.x release. To lock an exact version, write `mulling@1.0.0` instead.
+
+Next: [change the state as your AI works](../quick-start/).
+
+## Use a package manager
+
+If your project has a build step (Vite, Next.js, webpack and so on), install the package instead:
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+```sh
+npm install mulling
+```
+</TabItem>
+<TabItem label="pnpm">
+```sh
+pnpm add mulling
+```
+</TabItem>
+<TabItem label="yarn">
+```sh
+yarn add mulling
+```
+</TabItem>
+</Tabs>
+
+Then import it. The [quick start](../quick-start/) shows the code for plain JavaScript, React and Vue.
+
+## Requirements
+
+- Current Chrome, Edge, Firefox or Safari.
+- React 17 or later for the React component, Vue 3.3 or later for the Vue component.
+- Types ship with the package and work with every TypeScript module resolution mode, including `NodeNext`. Every entry point (a path you can import from, such as `mulling/core`) works with both `import` and `require()`.

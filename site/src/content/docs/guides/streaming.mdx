@@ -1,0 +1,171 @@
+---
+title: Stream a response
+description: Wire a loader to a streaming AI response, from the moment the user asks to the finished answer or an error.
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+import StreamDemo from '../../../components/StreamDemo.astro';
+
+Most chat interfaces go through the same steps. Each one maps to a state:
+
+<Steps>
+
+1. **The user asks.** Show `thinking` straight away, before the request has even left.
+2. **The AI uses a tool**, such as a web search, if your API tells you. Show `searching`.
+3. **The first words arrive.** Show `writing`, and stream the text in next to it.
+4. **The stream ends.** Show `done`. Or, if anything failed along the way, show `error`.
+
+</Steps>
+
+<StreamDemo />
+
+## The code
+
+These examples read a plain text stream from `/api/chat`. Swap in your own endpoint; only the four state changes matter.
+
+<Tabs syncKey="framework">
+<TabItem label="HTML">
+```html
+<mulling-status id="status" hidden></mulling-status>
+<p id="answer"></p>
+
+<script>
+  async function ask(question) {
+    const status = document.getElementById('status');
+    const answer = document.getElementById('answer');
+    answer.textContent = '';
+    status.hidden = false;
+    status.setAttribute('state', 'thinking');
+    try {
+      const res = await fetch('/api/chat', { method: 'POST', body: JSON.stringify({ question }) });
+      if (!res.ok) throw new Error(res.statusText);
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        status.setAttribute('state', 'writing');
+        answer.textContent += value;
+      }
+      status.setAttribute('state', 'done');
+    } catch {
+      status.setAttribute('state', 'error');
+    }
+  }
+</script>
+```
+</TabItem>
+<TabItem label="JS">
+```js
+import { mount } from 'mulling';
+
+// Mount once; each question then only changes the state.
+const status = mount(document.querySelector('#status'));
+const answerEl = document.querySelector('#answer');
+
+export async function ask(question) {
+  status.update({ state: 'thinking' });
+  answerEl.textContent = '';
+  try {
+    const res = await fetch('/api/chat', { method: 'POST', body: JSON.stringify({ question }) });
+    if (!res.ok) throw new Error(res.statusText);
+    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      status.update({ state: 'writing' });
+      answerEl.textContent += value;
+    }
+    status.update({ state: 'done' });
+  } catch {
+    status.update({ state: 'error' });
+  }
+}
+```
+</TabItem>
+<TabItem label="React">
+```tsx title="Ask.tsx"
+import { useState } from 'react';
+import { Mulling } from 'mulling/react';
+import type { LoaderState } from 'mulling';
+
+export function Ask() {
+  const [status, setStatus] = useState<LoaderState>();
+  const [answer, setAnswer] = useState('');
+
+  async function ask(question: string) {
+    setAnswer('');
+    setStatus('thinking');
+    try {
+      const res = await fetch('/api/chat', { method: 'POST', body: JSON.stringify({ question }) });
+      if (!res.ok || !res.body) throw new Error(res.statusText);
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        setStatus('writing');
+        setAnswer((a) => a + value);
+      }
+      setStatus('done');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  return (
+    <>
+      <button onClick={() => ask('What is Mulling?')}>Ask</button>
+      {status && <Mulling state={status} />}
+      <p>{answer}</p>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="Vue">
+```vue title="Ask.vue"
+<script setup lang="ts">
+import { ref } from 'vue';
+import { Mulling } from 'mulling/vue';
+import type { LoaderState } from 'mulling';
+
+const status = ref<LoaderState>();
+const answer = ref('');
+
+async function ask(question: string) {
+  answer.value = '';
+  status.value = 'thinking';
+  try {
+    const res = await fetch('/api/chat', { method: 'POST', body: JSON.stringify({ question }) });
+    if (!res.ok || !res.body) throw new Error(res.statusText);
+    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      status.value = 'writing';
+      answer.value += value;
+    }
+    status.value = 'done';
+  } catch {
+    status.value = 'error';
+  }
+}
+</script>
+
+<template>
+  <button @click="ask('What is Mulling?')">Ask</button>
+  <Mulling v-if="status" :state="status" />
+  <p>{{ answer }}</p>
+</template>
+```
+</TabItem>
+</Tabs>
+
+Setting `writing` for every chunk is fine: nothing changes, and nothing is announced again, until the state does.
+
+## Showing `searching`
+
+A plain text stream doesn't say when the AI is searching. Some APIs send events, such as a tool-use or search event, before the text starts. Set `searching` when one arrives, and `writing` when the text begins. Without such events, go straight from `thinking` to `writing`.
+
+## After `done`
+
+You can swap the loader for the answer straight away, or leave its check mark as a sign the answer is complete. See [Endings](../ai-states/#endings).

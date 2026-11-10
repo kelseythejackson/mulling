@@ -1,0 +1,296 @@
+---
+// Try every option on a live loader. The snippet below it is always the code for what you see,
+// in the framework you picked (remembered with the rest of the site's framework tabs).
+import { allLoaders } from 'mulling';
+import Loader from './Loader.astro';
+const states = [
+  { id: '', label: 'No state' },
+  { id: 'thinking', label: 'Thinking' },
+  { id: 'searching', label: 'Searching' },
+  { id: 'writing', label: 'Writing' },
+  { id: 'done', label: 'Done' },
+  { id: 'error', label: 'Error' },
+];
+const frameworks = ['HTML', 'JS', 'React', 'Vue'];
+---
+<div class="not-content play site-card" data-play>
+  <div class="view" data-view><Loader type="breath" size={96} /></div>
+  <form class="ctrl" aria-label="Loader options">
+    <fieldset class="field">
+      <legend>State</legend>
+      <div class="site-seg" role="radiogroup" aria-label="State" data-state-group>
+        {states.map((s, i) => <button type="button" role="radio" data-state={s.id} aria-checked={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{s.label}</button>)}
+      </div>
+    </fieldset>
+    <label class="field">
+      <span data-type-label>Loader</span>
+      <select name="type" aria-describedby="play-type-help">
+        {allLoaders.map((l) => <option value={l.type}>{l.name}</option>)}
+      </select>
+      <small id="play-type-help" class="help" data-type-help></small>
+    </label>
+    <div class="field">
+      <span id="play-color-label">Color</span>
+      <div class="color">
+        <input type="color" name="color" value="#6366f1" aria-labelledby="play-color-label" />
+        <button type="button" class="link" data-color-reset>Use text color</button>
+      </div>
+      <small class="help" data-contrast>Follows the text color around it.</small>
+    </div>
+    <label class="field">
+      <span>Size <output name="sizeOut">96px</output></span>
+      <input type="range" name="size" min="16" max="160" step="4" value="96" />
+    </label>
+    <label class="field">
+      <span>Speed <output name="speedOut">1×</output></span>
+      <input type="range" name="speed" min="0.25" max="3" step="0.25" value="1" />
+    </label>
+    <label class="field">
+      <span>Reduced motion</span>
+      <select name="reduced">
+        <option value="">Follow system</option>
+        <option value="true">Always calm</option>
+        <option value="false">Always animate</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" name="paused" /> Paused</label>
+  </form>
+  <div class="snippet">
+    <div class="tabs" role="tablist" aria-label="Code for">
+      {frameworks.map((f, i) => <button type="button" role="tab" data-fw={f} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{f}</button>)}
+    </div>
+    <div class="code" role="tabpanel" aria-label="Code">
+      <pre><code data-snippet>&lt;mulling-status type="breath" size="96"&gt;&lt;/mulling-status&gt;</code></pre>
+      <button type="button" class="copy" data-copy-snippet>Copy</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .play { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; overflow: hidden; margin-block: 1.5rem; }
+  .view { display: grid; place-items: center; min-height: 18rem; background: var(--sl-color-gray-6); color: var(--site-accent); }
+  .ctrl { border-left: 1px solid var(--sl-color-hairline); padding: 1rem; display: flex; flex-direction: column; gap: .9rem; font-size: var(--sl-text-xs); }
+  .field { display: flex; flex-direction: column; gap: .35rem; border: 0; padding: 0; margin: 0; color: var(--sl-color-gray-3); }
+  .field > span, legend { display: flex; justify-content: space-between; color: var(--sl-color-gray-3); padding: 0; }
+  .help { color: var(--sl-color-gray-3); font-size: var(--sl-text-2xs); line-height: 1.4; }
+  .help:empty { display: none; }
+  .help[data-warn] { color: var(--sl-color-orange-high, var(--sl-color-white)); }
+  output { color: var(--sl-color-white); font-family: var(--__sl-font-mono); }
+  select { font: inherit; color: var(--sl-color-white); background: var(--sl-color-black); border: 1px solid var(--sl-color-gray-4); border-radius: 6px; padding: .3rem .4rem; }
+  select:disabled { opacity: .6; }
+  input[type='range'] { accent-color: var(--sl-color-accent); width: 100%; }
+  .color { display: flex; align-items: center; gap: .6rem; }
+  input[type='color'] { inline-size: 2.25rem; block-size: 1.6rem; padding: 0; border: 1px solid var(--sl-color-gray-4); border-radius: 6px; background: none; cursor: pointer; }
+  .link { all: unset; cursor: pointer; color: var(--sl-color-accent-high); text-decoration: underline; text-underline-offset: 3px; }
+  .link[hidden] { display: none; }
+  .link:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+  .site-seg { flex-wrap: wrap; }
+  .check { display: flex; gap: .5rem; align-items: center; color: var(--sl-color-white); }
+  .check input { accent-color: var(--sl-color-accent); }
+  .snippet { grid-column: 1 / -1; border-top: 1px solid var(--sl-color-hairline); background: var(--sl-color-black); }
+  .tabs { display: flex; gap: .25rem; padding: .4rem .6rem 0; border-bottom: 1px solid var(--sl-color-hairline); }
+  .tabs button { all: unset; cursor: pointer; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); padding: .3rem .6rem .4rem; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tabs button[aria-selected='true'] { color: var(--sl-color-white); border-bottom-color: var(--sl-color-accent); }
+  .tabs button:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: -2px; }
+  .code { display: flex; align-items: center; gap: .75rem; padding: .6rem .6rem .6rem 1rem; }
+  pre { margin: 0; flex: 1; min-width: 0; overflow-x: auto; font-family: var(--__sl-font-mono); font-size: var(--sl-text-xs); color: var(--sl-color-white); background: none; border: 0; padding: 0; }
+  .copy { all: unset; cursor: pointer; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); padding: 3px 9px; border: 1px solid var(--sl-color-gray-4); border-radius: 6px; }
+  .copy:hover { color: var(--sl-color-white); }
+  .copy:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 1px; }
+  @media (max-width: 44rem) { .play { grid-template-columns: minmax(0, 1fr); } .ctrl { border-left: 0; border-top: 1px solid var(--sl-color-hairline); } }
+</style>
+
+<script>
+  import { contrast, parseColor } from '../../../src/color';
+  import { defaultStateLoaders } from '../../../src/states';
+  import { copyText } from '../scripts/copy.ts';
+  import { sitePaused } from '../scripts/loaders.ts';
+  import { radioGroup } from '../scripts/radio.ts';
+
+  const FW_KEY = 'starlight-synced-tabs__framework'; // shared with the site's other framework tabs
+  type Opt = { name: string; value: string | number | boolean | Record<string, string> };
+
+  /** The same options, written for each framework. */
+  const write: Record<string, (o: Opt[]) => string> = {
+    HTML: (o) =>
+      `<mulling-status ${o
+        .map(({ name, value }) =>
+          typeof value === 'object'
+            ? Object.entries(value).map(([k, v]) => `loader-${k}="${v}"`).join(' ')
+            : value === true
+              ? kebab(name)
+              : `${kebab(name)}="${value}"`,
+        )
+        .join(' ')}></mulling-status>`,
+    JS: (o) => `mount(el, { ${o.map(({ name, value }) => `${name}: ${js(value)}`).join(', ')} });`,
+    React: (o) =>
+      `<Mulling ${o
+        .map(({ name, value }) => (value === true ? name : typeof value === 'string' ? `${name}="${value}"` : `${name}={${js(value)}}`))
+        .join(' ')} />`,
+    Vue: (o) =>
+      `<Mulling ${o
+        .map(({ name, value }) => (typeof value === 'string' ? `${kebab(name)}="${value}"` : `:${kebab(name)}="${js(value)}"`))
+        .join(' ')} />`,
+  };
+  const kebab = (s: string) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+  const js = (v: Opt['value']): string =>
+    typeof v === 'string' ? `'${v}'` : typeof v === 'object' ? `{ ${Object.entries(v).map(([k, x]) => `${k}: '${x}'`).join(', ')} }` : String(v);
+
+  const readFw = () => {
+    try {
+      return localStorage.getItem(FW_KEY) ?? 'HTML';
+    } catch {
+      return 'HTML';
+    }
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-play]')) {
+    const loader = root.querySelector('mulling-status')!;
+    const view = root.querySelector<HTMLElement>('[data-view]')!;
+    const form = root.querySelector('form')!;
+    const code = root.querySelector('[data-snippet]')!;
+    const typeSelect = form.elements.namedItem('type') as HTMLSelectElement;
+    const typeLabel = root.querySelector('[data-type-label]')!;
+    const typeHelp = root.querySelector<HTMLElement>('[data-type-help]')!;
+    const colorInput = form.elements.namedItem('color') as HTMLInputElement;
+    const contrastHint = root.querySelector<HTMLElement>('[data-contrast]')!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+    let state = '';
+    let color = ''; // '' = follow the text color
+    let chosenType = 'breath'; // the loader picked with no state
+    let fw = tabs.some((t) => t.dataset.fw === readFw()) ? readFw() : 'HTML';
+
+    const render = () => {
+      const f = new FormData(form);
+      const working = state === 'thinking' || state === 'searching' || state === 'writing';
+      const opts: Opt[] = [];
+      const attrs: Record<string, string> = {};
+      if (!state) {
+        chosenType = typeSelect.value;
+        opts.push({ name: 'type', value: chosenType });
+        attrs.type = chosenType;
+      } else {
+        opts.push({ name: 'state', value: state });
+        attrs.state = state;
+        // A working state shows its own default loader; picking another sets that state's loader.
+        if (working && typeSelect.value !== defaultStateLoaders[state]) {
+          opts.push({ name: 'states', value: { [state]: typeSelect.value } });
+          attrs[`loader-${state}`] = typeSelect.value;
+        }
+      }
+      const size = Number(f.get('size'));
+      opts.push({ name: 'size', value: size });
+      attrs.size = String(size);
+      if (color) {
+        opts.push({ name: 'color', value: color });
+        attrs.color = color;
+      }
+      if (f.get('speed') !== '1') {
+        opts.push({ name: 'speed', value: Number(f.get('speed')) });
+        attrs.speed = String(f.get('speed'));
+      }
+      if (f.get('reduced')) {
+        opts.push({ name: 'reducedMotion', value: f.get('reduced') === 'true' });
+        attrs['reduced-motion'] = String(f.get('reduced'));
+      }
+      if (f.get('paused')) {
+        opts.push({ name: 'paused', value: true });
+        attrs.paused = '';
+      }
+
+      for (const a of [...loader.getAttributeNames()]) {
+        if (!['class', 'style', 'decorative'].includes(a) && !(a in attrs)) loader.removeAttribute(a);
+      }
+      for (const [k, v] of Object.entries(attrs)) loader.setAttribute(k, v);
+      loader.style.width = loader.style.height = `${size}px`;
+      (form.elements.namedItem('sizeOut') as HTMLOutputElement).value = `${size}px`;
+      (form.elements.namedItem('speedOut') as HTMLOutputElement).value = `${f.get('speed')}×`;
+
+      typeSelect.disabled = state === 'done' || state === 'error';
+      typeLabel.textContent = working ? `Loader while ${state}` : 'Loader';
+      typeHelp.textContent = typeSelect.disabled
+        ? `${state === 'done' ? 'Done' : 'Error'} always shows its own mark, so there’s no loader to choose.`
+        : working
+          ? `Sets the loader for this state only (the “states” option).`
+          : '';
+
+      code.textContent = write[fw](opts);
+      showContrast();
+    };
+
+    /** Loaders are graphics, so they need 3:1 against what's behind them (WCAG 1.4.11). */
+    const resetLink = root.querySelector<HTMLElement>('[data-color-reset]')!;
+    const toHex = (c: string) => {
+      const rgb = parseColor(c);
+      return rgb ? `#${rgb.map((n) => Math.round(n).toString(16).padStart(2, '0')).join('')}` : '#6366f1';
+    };
+    const showContrast = () => {
+      resetLink.hidden = !color;
+      if (!color) {
+        colorInput.value = toHex(getComputedStyle(view).color); // the swatch shows the color in use
+        contrastHint.textContent = 'Follows the text color around it.';
+        contrastHint.removeAttribute('data-warn');
+        return;
+      }
+      const fg = parseColor(color);
+      const bg = parseColor(getComputedStyle(view).backgroundColor);
+      if (!fg || !bg) return;
+      const ratio = contrast(fg, bg);
+      const ok = ratio >= 3;
+      contrastHint.textContent = `Contrast ${ratio.toFixed(1)}:1 on this background${ok ? '.' : ': too faint. Loaders need at least 3:1.'}`;
+      contrastHint.toggleAttribute('data-warn', !ok);
+    };
+
+    // Opened from a gallery tile (?loader=orbit): start with that loader.
+    const wanted = new URLSearchParams(location.search).get('loader');
+    if (wanted && [...typeSelect.options].some((o) => o.value === wanted)) typeSelect.value = wanted;
+    // Start in step with the site-wide pause button.
+    (form.elements.namedItem('paused') as HTMLInputElement).checked = sitePaused();
+
+    form.addEventListener('input', (e) => {
+      if (e.target === colorInput) color = colorInput.value;
+      render();
+    });
+    root.querySelector('[data-color-reset]')!.addEventListener('click', () => {
+      color = '';
+      render();
+    });
+    radioGroup(root.querySelector<HTMLElement>('[data-state-group]')!, (b) => {
+      state = b.dataset.state ?? '';
+      // Show the loader this state will actually use.
+      typeSelect.value = state === 'thinking' || state === 'searching' || state === 'writing' ? defaultStateLoaders[state] : chosenType;
+      render();
+    });
+
+    const selectTab = (t: HTMLButtonElement, focus = false) => {
+      fw = t.dataset.fw!;
+      for (const o of tabs) {
+        o.setAttribute('aria-selected', String(o === t));
+        o.tabIndex = o === t ? 0 : -1;
+      }
+      if (focus) t.focus();
+      try {
+        localStorage.setItem(FW_KEY, fw);
+      } catch {
+        /* not remembered */
+      }
+      render();
+    };
+    for (const t of tabs) {
+      t.addEventListener('click', () => selectTab(t));
+      t.addEventListener('keydown', (e) => {
+        const i = tabs.indexOf(t);
+        const next = e.key === 'ArrowRight' ? tabs[(i + 1) % tabs.length] : e.key === 'ArrowLeft' ? tabs[(i - 1 + tabs.length) % tabs.length] : null;
+        if (next) {
+          e.preventDefault();
+          selectTab(next, true);
+        }
+      });
+    }
+    selectTab(tabs.find((t) => t.dataset.fw === fw)!);
+
+    root.querySelector<HTMLButtonElement>('[data-copy-snippet]')!.addEventListener('click', (e) =>
+      copyText(e.currentTarget as HTMLElement, code.textContent ?? ''),
+    );
+  }
+</script>

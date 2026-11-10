@@ -1,0 +1,24 @@
+---
+title: Web component
+description: <mulling-status> works in plain HTML and every framework.
+---
+
+Register the element once, then use it anywhere: plain HTML, Svelte, Angular, Solid, server-rendered templates.
+
+```js
+import { defineElement } from 'mulling';
+defineElement(); // registers <mulling-status>; pass a name to use a different tag
+```
+
+```html
+<mulling-status type="coil" label="Thinking"></mulling-status>
+<mulling-status state="searching" label-searching="Searching 14 sources"></mulling-status>
+```
+
+Every option is an attribute; see [Options](../../reference/options/). Removing an attribute resets that option to its default.
+
+A value it can't use, like `state="Thinking"` or `size="32px"`, falls back to the default. One console warning names the attribute and says what to write instead. The loader never goes blank.
+
+- `refresh()` re-reads colors after a theme change the library can't see.
+- Moving the element (a keyed list reorder, `appendChild` elsewhere) keeps the running loader: it doesn't restart or announce again.
+- Its shadow root, the element's private inside, keeps your page's CSS out, so broad rules like `.chat div { display: flex }` can't change how it looks.
