@@ -184,14 +184,18 @@
     "vue"
   ],
   "license": "MIT",
-  "author": "YOUR NAME",
+  "author": "Kelsey Jackson",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YOUR-USERNAME/mulling.git"
+    "url": "git+https://github.com/kelseythejackson/mulling.git"
   },
-  "homepage": "https://YOUR-USERNAME.github.io/mulling/",
+  "homepage": "https://kelseythejackson.github.io/mulling/",
   "bugs": {
-    "url": "https://github.com/YOUR-USERNAME/mulling/issues"
+    "url": "https://github.com/kelseythejackson/mulling/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",

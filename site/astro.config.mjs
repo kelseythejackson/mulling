@@ -9,7 +9,7 @@ const lib = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
 
 export default defineConfig({
   // GitHub Pages serves a project site from /<repo>/; set SITE_BASE='/' for a custom domain.
-  site: process.env.SITE_URL ?? 'https://YOUR-USERNAME.github.io',
+  site: process.env.SITE_URL ?? 'https://kelseythejackson.github.io',
   base: process.env.SITE_BASE ?? '/mulling',
   integrations: [
     starlight({
@@ -18,8 +18,8 @@ export default defineConfig({
         'Thinking, searching, writing, done. Eight small loaders with reduced-motion versions and screen-reader announcements built in.',
       logo: { light: './src/assets/logo.svg', dark: './src/assets/logo-dark.svg', replacesTitle: false },
       favicon: '/favicon.svg',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/YOUR-USERNAME/mulling' }],
-      editLink: { baseUrl: 'https://github.com/YOUR-USERNAME/mulling/edit/main/site/' },
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/kelseythejackson/mulling' }],
+      editLink: { baseUrl: 'https://github.com/kelseythejackson/mulling/edit/main/site/' },
       customCss: ['./src/styles/theme.css'],
       head: [
         {

@@ -41,7 +41,7 @@ A custom loader that uses the old names logs one warning. Other class names insi
 
 ## 4. From 0.3 or earlier: loaders are registered
 
-If you're coming from 0.3, `import 'mulling'` still registers every loader, so nothing changes. To ship less, see [Bundle size](https://YOUR-USERNAME.github.io/mulling/guides/bundle-size/). `LoaderType` accepts any name now, so custom loaders type-check; use `BuiltInLoaderType` where you want the strict list.
+If you're coming from 0.3, `import 'mulling'` still registers every loader, so nothing changes. To ship less, see [Bundle size](https://kelseythejackson.github.io/mulling/guides/bundle-size/). `LoaderType` accepts any name now, so custom loaders type-check; use `BuiltInLoaderType` where you want the strict list.
 
 ## 5. Orbit looks slightly different at small sizes
 
