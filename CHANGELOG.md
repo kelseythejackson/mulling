@@ -2,13 +2,14 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
-## 1.0.0 — unreleased
+## 1.0.0 — 2026-11-17
 
 **Renamed to Mulling.** The package is now `mulling`, the element `<mulling-status>` and the React and Vue component `Mulling`. `<thinking-loader>`, `ThinkingLoader` and the old type names still work until 2.0, with a one-time warning. See MIGRATING.md.
 
 The API is now stable: see "Stability" in the README for what that covers. Upgrading from 0.x: see [MIGRATING.md](MIGRATING.md).
 
 ### Changed
+
 - **The last of the old "tl" names are gone.** Custom properties are now `--mulling-done`, `--mulling-error` and `--mulling-eye`; custom loaders use `--mulling-color`, `--mulling-duration` and the `mulling-animate` class. The old names (`--tl-done`, `--tl-error`, `--tl-eye`, `--tl-c`, `--tl-dur`, `tl-a`) keep working until 2.0, and a custom loader that uses them warns once. Internal class names are now `mulling-*`. This adds about 0.15 kB compressed
 - **`<mulling-status>` reports invalid attributes**, like `mount()` does, instead of silently using the default. The warning names the element and attribute
 - **Warnings say what to write instead**: they list the accepted values, suggest the nearest match for a mistyped loader or state ("Did you mean "orbit"?"), and give an example for sizes and speeds. Colors are checked with the browser's CSS parser, so `color: 'blurple'` now warns
@@ -19,6 +20,7 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 - Screenshot tests are taken at device resolution with a pixel-count threshold, so a broken small loader can no longer slip through. The old 1% threshold hid changes to any single 20px loader
 
 ### Added
+
 - API reference, generated from the code's documentation, published with the demo at `/api`
 - A test that pins every entry point's exports, and a compile-time check that the React and Vue components pass through every option
 - A release check that stops `npm publish` while placeholders remain or the version and changelog disagree
@@ -26,9 +28,11 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 - MIGRATING.md
 
 ### Removed
+
 - `loaders`, `loaderTypes`, `baseCss`, `markCss` and `calmCss`. See MIGRATING.md for replacements
 
 ### Fixed (from the 1.0 code audit)
+
 - A custom loader that throws while drawing no longer stops every other canvas loader on the page. It's reported once and removed
 - The animation loop stops completely when no loader can be seen, and restarts when one scrolls into view or the tab comes back. Loaders removed from the page without `destroy()` no longer keep it running, and are forgotten after 30 seconds
 - Every option is validated. Invalid values (`speed: NaN`, a negative or huge `size`, `time: Infinity`, an unknown `state`, `maxFps: 0`, an empty label) warn once and use the default, instead of blanking, crashing or leaking. `reducedMotion` and `paused` accept the strings `'true'` and `'false'`
@@ -45,15 +49,18 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 - Every entry point can be `require()`d: there is now a CommonJS build, with its own `.d.cts` types
 
 ### Added (from the 1.0 code audit)
+
 - `paused` option (and attribute and prop) to stop and resume the animation, for WCAG 2.2.2
 - A type check (Are the Types Wrong?) across every resolution mode, a NodeNext and CommonJS consumer test, Biome linting and formatting, and an `.editorconfig`
 - The release workflow runs the browser tests and every check before publishing
 - A compile-time check that the Vue component has a prop for every option
 
 ### Changed (from the 1.0 code audit)
+
 - Size budgets raised: validation, the sturdier loop and the announcer fixes add about 1.3 kB compressed. Everything is now 8.3 kB; core with one loader 6.1 kB
 
 ### Fixed (from the second audit round)
+
 - **Strict CSP:** the tide loader no longer uses inline `style` attributes, which strict policies block (its bars moved in lockstep). The nonce is remembered for every style tag added later, can be set with `<thinking-loader nonce>`, and is read from `<meta property="csp-nonce">` when none is given
 - **Moving a `<thinking-loader>`** (a keyed list reorder, `appendChild` elsewhere) keeps the running loader. It no longer restarts or announces its state again; it's only torn down if it's still detached after the current task
 - **Page swaps:** styles removed by tools like Turbo or htmx are added back on the next mount, update or refresh, including a shadow root whose adopted sheets were reset. A replaced `<body>` is watched for theme changes. A loader mounted into a detached element gets styles in the document or shadow root it's moved into
@@ -66,6 +73,7 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 - Size budgets raised by 0.5 kB: these fixes add about 0.3 kB compressed. Everything is now 8.8 kB; core with one loader 6.5 kB
 
 ### Docs site
+
 - **Local setup:** `npm run setup` installs both projects; `.nvmrc` pins Node 22.23.4 (the docs site's Astro needs it); `.env.example` lists the optional settings; the README has a "Running locally" section with troubleshooting
 - `npm run test:site` serves on a free port, so it no longer collides with `npm run dev` on 4321, and it says what to build when something is missing. CI now builds the library before the browser tests and the site check, which need it
 - Fixed: `npm run dev` failed on machines with `@types/node` installed. The API reference type-checked the test files too, and a test had a type error there. It now reads only `src/`
@@ -100,6 +108,7 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 Custom loaders, and smaller bundles. `import 'thinking-loaders'` works as before.
 
 ### Added
+
 - `use()` registers loaders. A loader is one plain object (`LoaderDef`): a paint function for canvas, or markup, styles and a cycle length for CSS. Registering an existing name replaces it, and mounted loaders switch straight away
 - `thinking-loaders/core`: everything except the loaders. With one loader an app ships 4.7 kB compressed, against 6.9 kB for everything
 - `thinking-loaders/loaders`: each built-in loader as a separate export, plus `allLoaders` and `stateLoaders` (breath, murmur, tide)
@@ -112,6 +121,7 @@ Custom loaders, and smaller bundles. `import 'thinking-loaders'` works as before
 - A bundle check in CI that confirms unused loaders are left out, and that the React entry keeps its loaders; a check that installs the packed package in a fresh project and type-checks and bundles every entry point; size budgets for each way of importing
 
 ### Changed
+
 - Each loader's styles are added to the page the first time it's shown, instead of all at once
 - Each built-in loader lives in its own file in `src/loaders/`, which is also what the demo's code panel shows
 - `LoaderType` now accepts any name, so custom loaders type-check; built-in names still autocomplete (`BuiltInLoaderType` is the strict list). Code with an exhaustive `switch` over `LoaderType` will need a default case
@@ -121,6 +131,7 @@ Custom loaders, and smaller bundles. `import 'thinking-loaders'` works as before
 - Passing `undefined` for an option that has a default (`type`, `size`, `color`, `speed`, `reducedMotion`, `announce`) now uses the default instead of breaking the loader. Framework props often arrive as `undefined`
 
 ### Removed
+
 - `loaderCss`, `isCssLoader` and the internal fixed lists of loaders and painters. Use `getLoader(type).css`, or import the loader object
 
 ## 0.3.0
@@ -128,6 +139,7 @@ Custom loaders, and smaller bundles. `import 'thinking-loaders'` works as before
 AI states. No breaking changes: code that only uses `type` works as before.
 
 ### Added
+
 - `state` option: `thinking`, `searching`, `writing`, `done` and `error`. Each working state shows a loader; changing state cross-fades over 0.2 s
 - `done` and `error` endings: a ring settles in and a check or exclamation mark draws itself on, then holds still. With reduced motion they appear fully drawn
 - `states` option to choose the loader for each working state, and `labels` to choose what screen readers hear in each state
@@ -137,9 +149,11 @@ AI states. No breaking changes: code that only uses `type` works as before.
 - Tests for states, cross-fades, endings and the announcer, plus screenshots of every state in all four display modes
 
 ### Changed
+
 - Bundle size budget raised from 6 kB to 7 kB (brotli). States, endings, cross-fades and the announcer add about 1.2 kB; the full library is now 6.3 kB. Per-loader imports, planned for 1.0, will let apps ship only what they use
 
 ### Fixed
+
 - Removing an attribute from `<thinking-loader>` now resets that option to its default, instead of keeping the last value
 
 ## 0.2.0
@@ -147,6 +161,7 @@ AI states. No breaking changes: code that only uses `type` works as before.
 Faster, sturdier, better tested. No breaking changes.
 
 ### Added
+
 - `maxFps` option: canvas loaders 32px and smaller now draw at most 30 frames a second by default
 - `time` option: freeze a loader at a set moment, for screenshot tests and static previews
 - `refresh()` on the handle and the web component, to re-read colors after unusual theme changes
@@ -155,12 +170,14 @@ Faster, sturdier, better tested. No breaking changes.
 - Browser test suite: screenshots in light, dark, reduced-motion and forced-colors modes; frame-rate, off-screen, theme and performance checks
 
 ### Changed
+
 - Web components share one stylesheet instead of each adding its own `<style>` tag
 - With reduced motion, canvas loaders draw one still frame and fade with CSS, instead of redrawing every frame
 - Canvas colors update when the theme changes, instead of being re-read every second
 - Canvas loaders redraw sharply when a window moves to a screen with a different pixel density
 
 ### Fixed
+
 - Loaders no longer disappear in Windows High Contrast and other forced-colors modes
 - The `blink` loader's eyes now contrast with any body color, instead of always being white
 
