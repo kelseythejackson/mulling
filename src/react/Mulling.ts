@@ -21,7 +21,7 @@ export interface MullingRef {
 }
 
 /**
- * React component for a thinking loader. Every `mount()` option is a prop.
+ * React component for a Mulling loader. Every `mount()` option is a prop.
  *
  * ```tsx
  * <Mulling state={status} announce="polite" />

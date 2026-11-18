@@ -10,7 +10,7 @@ const snippet = `<script src="https://cdn.jsdelivr.net/npm/mulling@1/dist/mullin
 <mulling-status state="thinking"></mulling-status>`;
 const states = [
   { id: 'thinking', label: 'Thinking', status: 'Thinking about your question' },
-  { id: 'searching', label: 'Searching', status: 'Searching 14 sources' },
+  { id: 'searching', label: 'Searching', status: 'Searching 3 sources' },
   { id: 'writing', label: 'Writing', status: 'Writing the answer' },
   { id: 'done', label: 'Done', status: 'Answer ready' },
   { id: 'error', label: 'Error', status: 'Something went wrong' },
@@ -23,7 +23,7 @@ const states = [
     <p class="lede">Thinking, searching, writing, done. Each step has its own loader, and screen readers hear every change once.</p>
     <div class="cta">
       <a class="btn primary" href={`${base}/start/quick-start/`}>Get started</a>
-      <span class="install"><code>&lt;script src="…/mulling@1"&gt;</code><button type="button" class="copy-btn" data-copy={snippet} aria-label="Copy the script tag snippet for any HTML page">Copy</button></span>
+      <span class="install"><code>&lt;script src="…/mulling@1"&gt;</code><button type="button" class="copy-btn" data-copy={snippet} title="Copies the script tags and an example element, ready to paste into any HTML page">Copy snippet</button></span>
       <a class="alt" href={`${base}/start/installation/#use-a-package-manager`}>or <code>npm i mulling</code></a>
     </div>
   </div>
@@ -72,7 +72,7 @@ const states = [
 
 <script>
   import { copyText } from '../scripts/copy.ts';
-  import { sitePaused } from '../scripts/loaders.ts';
+  import { PAUSE_EVENT } from '../scripts/loaders.ts';
   import { radioGroup } from '../scripts/radio.ts';
 
   for (const b of document.querySelectorAll<HTMLButtonElement>('.hero [data-copy]')) b.addEventListener('click', () => copyText(b, b.dataset.copy ?? ''));
@@ -90,22 +90,36 @@ const states = [
       status.textContent = b.dataset.status!;
     };
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let picked = false; // once the visitor picks a state, autoplay stays off
     const group = radioGroup(stage.querySelector<HTMLElement>('[data-state-group]')!, (b) => {
+      picked = true;
       clearTimeout(timer);
       show(b);
     });
 
-    // Plays through thinking → done once, then waits. Not under reduced motion, or when animations are paused.
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches || sitePaused();
-    if (!calm) {
-      let i = 0;
-      const step = () => {
-        i += 1;
-        if (i > 3) return;
-        show(buttons[i]);
-        timer = setTimeout(step, 2200);
-      };
-      timer = setTimeout(step, 2200);
-    }
+    // Plays thinking → searching → writing → done, rests on done, then starts again, so the hero is still
+    // moving whenever someone looks at it. Stops for good when the visitor picks a state, and never runs
+    // under reduced motion or while motion is paused (checked on every step, and when the pause changes).
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const STEP = 2200;
+    const REST = 4000;
+    // The page attribute, not storage: it's right even where storage is blocked.
+    const paused = () => document.documentElement.hasAttribute('data-loaders-paused');
+    let i = 0;
+    const step = () => {
+      if (reduced.matches || paused()) return;
+      i = (i + 1) % 4;
+      show(buttons[i]);
+      timer = setTimeout(step, i === 3 ? REST : STEP);
+    };
+    const start = () => {
+      clearTimeout(timer);
+      if (!reduced.matches && !paused()) timer = setTimeout(step, STEP);
+    };
+    document.addEventListener(PAUSE_EVENT, (e) => {
+      clearTimeout(timer);
+      if (!(e as CustomEvent<boolean>).detail && !picked) start();
+    });
+    start();
   }
 </script>

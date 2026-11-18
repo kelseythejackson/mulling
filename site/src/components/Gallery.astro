@@ -12,7 +12,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="meta">
         <!-- The name is the link; its ::after stretches over the whole tile, so the tile is one click target. -->
         <a class="name" href={`${base}/guides/loaders/?loader=${l.type}#playground`}>{l.name}<span class="sr-only">: try it in the playground</span></a>
-        <span class="tech">{l.tech}</span>
+        <span class="tech">{l.tech === 'css' ? 'CSS' : 'Canvas'}</span>
         <button type="button" class="copy" data-copy={`<mulling-status type="${l.type}"></mulling-status>`} aria-label={`Copy the ${l.name} snippet`}>Copy</button>
       </div>
     </li>
@@ -28,8 +28,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .art { flex: 1; display: grid; place-items: center; color: var(--site-accent); }
   .name::after { content: ''; position: absolute; inset: 0; }
   .name { text-decoration: none; }
-  .name:focus-visible { outline: none; }
-  .tile:has(.name:focus-visible) { outline: 2px solid var(--sl-color-accent); outline-offset: -3px; }
+  /* The whole tile shows focus where :has() works; elsewhere the link keeps its own ring. */
+  @supports selector(:has(*)) {
+    .name:focus-visible { outline: none; }
+    .tile:has(.name:focus-visible) { outline: 2px solid var(--sl-color-accent); outline-offset: -3px; }
+  }
   /* Shown on hover and keyboard focus only: the highlighted tile already says it's clickable. */
   .try { position: absolute; top: .75rem; right: 1rem; font-size: var(--sl-text-2xs); color: var(--sl-color-accent-high); opacity: 0; transition: opacity .15s ease; }
   .tile:hover .try, .tile:focus-within .try { opacity: 1; }

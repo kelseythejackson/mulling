@@ -211,14 +211,14 @@ const check = (ok, what) => {
   await page.locator('.gallery .tile').filter({ hasText: 'Orbit' }).getByRole('button', { name: /Copy/ }).click();
   check(page.url() === `${base}/`, 'gallery: the Copy button copies without following the tile’s link');
   // On a docs page, with the sidebar, the paused notice must be on top and clickable.
-  await page.evaluate(() => localStorage.setItem('mulling-site-paused', '1'));
+  await page.evaluate(() => sessionStorage.setItem('mulling-site-paused', '1'));
   await page.goto(`${base}/guides/ai-states/`, { waitUntil: 'load' });
   const resume = page.locator('.site-paused-notice button');
   const at = await resume.boundingBox();
   const onTop =
     at && (await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('.site-paused-notice') != null, [at.x + 4, at.y + 4]));
   check(onTop, 'docs page (desktop): the paused notice is visible above the sidebar');
-  await page.evaluate(() => localStorage.setItem('mulling-site-paused', '0'));
+  await page.evaluate(() => sessionStorage.setItem('mulling-site-paused', '0'));
   await page.close();
 }
 {

@@ -1,5 +1,6 @@
 ---
-// One section per built-in loader, from the library's own definitions.
+// One section per built-in loader, from the library's own definitions. The sections are unnamed, so they
+// aren't eight extra landmarks; each one's h3 already gives the page its structure.
 import { allLoaders, defaultStateLoaders } from 'mulling';
 import Loader from './Loader.astro';
 const goodFor: Record<string, string> = {
@@ -19,7 +20,7 @@ const defaultFor = (type: string) =>
 ---
 <div class="list">
   {allLoaders.map((l) => (
-    <section class="item" aria-labelledby={l.type}>
+    <section class="item">
       <div class="not-content art site-card">
         <Loader type={l.type} size={64} />
         <Loader type={l.type} size={20} />

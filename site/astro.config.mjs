@@ -1,16 +1,22 @@
 // Docs site for mulling: design direction A, "Quiet Instrument".
 // Monochrome, one accent colour, so the loaders are the only moving, coloured things on the page.
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 import starlightTypeDoc, { typeDocSidebarGroup } from 'starlight-typedoc';
 
 const lib = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
+// The repository and published site come from package.json, so a fork only changes them there
+// (and SITE_URL / SITE_BASE for where its own docs are deployed).
+const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+const repo = pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '');
+const home = new URL(pkg.homepage);
 
 export default defineConfig({
   // GitHub Pages serves a project site from /<repo>/; set SITE_BASE='/' for a custom domain.
-  site: process.env.SITE_URL ?? 'https://kelseythejackson.github.io',
-  base: process.env.SITE_BASE ?? '/mulling',
+  site: process.env.SITE_URL ?? home.origin,
+  base: process.env.SITE_BASE ?? home.pathname.replace(/\/$/, ''),
   integrations: [
     starlight({
       title: 'Mulling',
@@ -18,8 +24,8 @@ export default defineConfig({
         'Thinking, searching, writing, done. Eight small loaders with reduced-motion versions and screen-reader announcements built in.',
       logo: { light: './src/assets/logo.svg', dark: './src/assets/logo-dark.svg', replacesTitle: false },
       favicon: '/favicon.svg',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/kelseythejackson/mulling' }],
-      editLink: { baseUrl: 'https://github.com/kelseythejackson/mulling/edit/main/site/' },
+      social: [{ icon: 'github', label: 'GitHub', href: repo }],
+      editLink: { baseUrl: `${repo}/edit/main/site/` },
       customCss: ['./src/styles/theme.css'],
       head: [
         {

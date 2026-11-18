@@ -1,4 +1,5 @@
 import type { MountOptions } from './mount';
+import { DEFAULTS, MAX_SIZE } from './options';
 import { loaderStates } from './states';
 
 /** Every option a wrapper passes through. Listed explicitly so a prop that goes away is passed as undefined, which unsets it. */
@@ -57,7 +58,9 @@ export function optionsKey(opts: MountOptions): string {
 
 /** Inline style for the wrapper element: reserves the loader's space before it mounts, so nothing shifts. */
 export function reserveSize(size: number | undefined) {
-  const px = `${size ?? 20}px`;
+  // Match what mount() will draw: invalid sizes fall back to the default, and large ones are capped.
+  const valid = typeof size === 'number' && size > 0 && Number.isFinite(size);
+  const px = `${valid ? Math.min(size, MAX_SIZE) : DEFAULTS.size}px`;
   return { display: 'inline-flex', width: px, height: px, verticalAlign: 'middle', lineHeight: '0' };
 }
 

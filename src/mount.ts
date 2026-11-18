@@ -46,11 +46,15 @@ export interface MountOptions {
   paused?: boolean;
   /**
    * What screen readers hear when no `state` is set. Default `'Loading'`.
+   * While a `state` is set, a string here is ignored (with a warning): use `labels` to change what each state says.
    * Pass `null` when visible text next to the loader already says what is happening;
    * the loader is then hidden from assistive technology, whatever its state.
    */
   label?: string | null;
-  /** What screen readers hear in each state. Defaults: Thinking, Searching, Writing, Done, Something went wrong. */
+  /**
+   * What screen readers hear in each state. Defaults: Thinking, Searching, Writing, Done, Something went wrong.
+   * The default for `error` is generic: set `labels.error` to say what failed and what the user can do next.
+   */
   labels?: Partial<Record<LoaderState, string>>;
   /**
    * How changes reach screen readers.
@@ -233,9 +237,16 @@ export function mount(target: HTMLElement | ShadowRoot, options: MountOptions = 
       words.textContent = label;
     }
 
-    if (opts.announce === 'polite' && label !== null && label !== spoken) announce(owner, label, host, opts.state === 'error');
-    if (label === null || opts.announce === 'off') cancelAnnouncement(owner);
-    spoken = opts.announce === 'polite' ? label : null;
+    // A loader that isn't on the page yet stays quiet; it speaks once it's attached (see waitUntilAttached).
+    const speak = opts.announce === 'polite' && label !== null;
+    if (speak && label !== spoken && host.isConnected) {
+      announce(owner, label, host, opts.state === 'error');
+      spoken = label;
+    }
+    if (!speak) {
+      cancelAnnouncement(owner);
+      spoken = null;
+    }
   }
 
   /** Freezes or resumes CSS animations in a layer, following the `time` option. */
@@ -344,7 +355,8 @@ export function mount(target: HTMLElement | ShadowRoot, options: MountOptions = 
           // a paused one stays exactly where it stopped.
           removeFromLoop(job, canvas);
           try {
-            draw(opts.time ?? (opts.paused && !calm ? t : 0.9));
+            // `time` is scaled by speed, as CSS loaders' durations are, so both kinds freeze at the same pose.
+            draw(opts.time !== undefined ? opts.time * opts.speed : opts.paused && !calm ? t : 0.9);
           } catch (err) {
             console.error(`mulling: the "${def.type}" loader threw while drawing.`, err);
           }

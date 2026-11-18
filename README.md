@@ -112,7 +112,7 @@ The published library supports Node 18 and later (`"engines"` in `package.json`)
 ### Check it works
 
 - **Docs site:** open **http://localhost:4321/mulling/**. The page title is "Mulling: calm, accessible loaders for AI interfaces". The site lives under `/mulling/`, so `http://localhost:4321/` on its own shows a 404.
-- **Unit tests:** `npm test` ends with `Tests  114 passed`.
+- **Unit tests:** `npm test` ends with `Tests  120 passed`.
 - **Library build:** `npm run build` writes `dist/`, including `dist/mulling.umd.js`, the script-tag file.
 - **Everything else** (after `npm run build` and `npm run build:site`):
 
@@ -151,6 +151,8 @@ npm run test:site    # every page: axe (WCAG 2.1 AA) in light and dark, links, a
 | `dist/mulling.umd.js is missing` or `Build the library: run npm run build first` | The browser tests and the site check load the built library                                   | `npm run build`                                                                                    |
 | `Build the docs site: run npm run build:site first`                              | `npm run test:site` checks the built site                                                     | `npm run build:site`                                                                               |
 | `npm run test:package` fails while installing                                    | It installs from the npm registry                                                             | Run it with network access                                                                         |
+| Every loader only fades in place, and the landing page's demo doesn't play        | Your system's Reduce Motion setting is on, and the site respects it                           | Turn it off before a demo (macOS: System Settings → Accessibility → Display), or show a loader with "Always animate" in the playground |
+| Every loader is frozen, with a "Motion is paused" notice                          | "Pause motion" was pressed earlier in this browser tab                                         | Press "Resume motion". The choice lasts only for the tab, so a new tab starts moving              |
 | `npm run check:sizes` says sizes are out of date                                 | A change altered the bundle size                                                              | `npm run build && npm run sizes`, then commit `site/src/data/sizes.json`                           |
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to add a loader, and [VOICE.md](VOICE.md) for how the docs are written.

@@ -40,12 +40,14 @@ export const markCss = `
  * The fade stops at 80%: any color with 4.5:1 contrast keeps at least 3:1 there (WCAG 1.4.11).
  * Endings appear fully drawn and fade in once. Calm canvases draw one still frame and fade in CSS,
  * so no JavaScript runs per frame.
+ * The calm `animation` shorthand resets animation-play-state, so the paused rule repeats the calm selectors
+ * (with higher specificity, and later) to keep `paused` working under reduced motion.
  */
 export const calmCss = `
 .mulling-reduced .mulling-animate,.mulling-reduced .tl-a{animation:mulling-calm 2.6s ease-in-out infinite !important;transform:none !important}
 .mulling-reduced .mulling-mark .mulling-animate{animation:mulling-appear .3s ease-out both !important;stroke-dashoffset:0 !important}
 .mulling-host canvas.mulling-calm{animation:mulling-calm 2.6s ease-in-out infinite}
-.mulling-paused,.mulling-paused *{animation-play-state:paused !important}
+.mulling-paused,.mulling-paused *,.mulling-paused .mulling-reduced .mulling-animate,.mulling-paused .mulling-reduced .tl-a{animation-play-state:paused !important}
 @keyframes mulling-calm{0%,100%{opacity:.8}50%{opacity:1}}
 `;
 

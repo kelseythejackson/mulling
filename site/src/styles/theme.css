@@ -43,6 +43,8 @@
   --site-accent: #8ea2ff; /* the color every demo loader is drawn in */
   --site-surface: #111111;
   --site-radius: 12px;
+  /* Borders that identify a control (selects, color inputs, segmented groups): at least 3:1 (WCAG 1.4.11). */
+  --site-control-border: #6b6b6b; /* 3.7:1 on #0a0a0a */
 
   --sl-text-h1: 2.5rem;
   --sl-text-h2: 1.6rem;
@@ -75,6 +77,7 @@
   --site-code-bg: #f7f7f7;
   --site-accent: #3b5bdb;
   --site-surface: #fafafa;
+  --site-control-border: #8a8a8a; /* 3.4:1 on #fff, 3.3:1 on #fafafa */
 }
 
 /* ---------- Type ---------- */
@@ -202,7 +205,7 @@ starlight-toc a[aria-current="true"] {
   display: inline-flex;
   gap: 2px;
   padding: 2px;
-  border: 1px solid var(--sl-color-gray-4);
+  border: 1px solid var(--site-control-border);
   border-radius: 8px;
   font-size: var(--sl-text-xs);
 }
@@ -213,11 +216,12 @@ starlight-toc a[aria-current="true"] {
   border-radius: 6px;
   color: var(--sl-color-gray-3);
 }
+/* The chosen option is filled with the text color (inverted), so it stands out at well over 3:1 in both
+   themes; a near-background fill and hairline left only the text weight to show which was chosen. */
 .site-seg button[aria-pressed="true"],
 .site-seg button[aria-checked="true"] {
-  background: var(--sl-color-gray-6);
-  color: var(--sl-color-white);
-  box-shadow: 0 0 0 1px var(--sl-color-hairline);
+  background: var(--sl-color-white);
+  color: var(--sl-color-black);
 }
 .site-seg button:focus-visible {
   outline: 2px solid var(--sl-color-accent);

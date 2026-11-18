@@ -32,7 +32,7 @@ const allPropsCovered: [MissingVueProps] extends [never] ? true : MissingVueProp
 void allPropsCovered;
 
 /**
- * Vue component for a thinking loader. Every `mount()` option is a prop (kebab-case in templates).
+ * Vue component for a Mulling loader. Every `mount()` option is a prop (kebab-case in templates).
  *
  * ```vue
  * <Mulling :state="status" announce="polite" />

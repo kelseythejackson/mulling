@@ -5,7 +5,7 @@ import Loader from './Loader.astro';
 ---
 <div class="not-content stream site-card" data-stream>
   <div class="answer">
-    <p class="status"><span class="slot" data-stream-slot hidden><Loader state="thinking" size={20} label="Thinking" /></span><span data-stream-status>Press “Ask” to start.</span></p>
+    <p class="status"><span class="slot" data-stream-slot hidden><Loader state="thinking" size={20} /></span><span data-stream-status>Press “Ask” to start.</span></p>
     <p class="text" data-stream-text></p>
   </div>
   <div class="bar">
@@ -44,9 +44,10 @@ import Loader from './Loader.astro';
     const buttons = root.querySelectorAll<HTMLButtonElement>('button');
     const slot = root.querySelector<HTMLElement>('[data-stream-slot]')!;
     let running = false;
+    // What screen readers hear in each state is set with label-<state>; `label` only applies without a state.
+    for (const [state, words] of Object.entries(steps)) loader.setAttribute(`label-${state}`, words);
     const set = (state: keyof typeof steps) => {
       loader.setAttribute('state', state);
-      loader.setAttribute('label', steps[state]);
       status.textContent = steps[state];
       now.textContent = `state="${state}"`;
     };
@@ -58,6 +59,8 @@ import Loader from './Loader.astro';
       slot.hidden = false;
       text.textContent = '';
       set('thinking');
+      // Decorative (silent) until the first Ask, so screen readers don't hear "Thinking" when the page loads.
+      loader.removeAttribute('decorative');
       await wait(1400);
       set('searching');
       await wait(1600);

@@ -4,7 +4,7 @@
 import { allLoaders } from 'mulling';
 import Loader from './Loader.astro';
 const states = [
-  { id: '', label: 'No state' },
+  { id: '', label: 'None' },
   { id: 'thinking', label: 'Thinking' },
   { id: 'searching', label: 'Searching' },
   { id: 'writing', label: 'Writing' },
@@ -22,13 +22,14 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
         {states.map((s, i) => <button type="button" role="radio" data-state={s.id} aria-checked={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{s.label}</button>)}
       </div>
     </fieldset>
-    <label class="field">
-      <span data-type-label>Loader</span>
-      <select name="type" aria-describedby="play-type-help">
+    <div class="field">
+      <!-- The help text sits outside the label, so it's the select's description, not part of its name. -->
+      <label for="play-type" data-type-label>Loader</label>
+      <select id="play-type" name="type" aria-describedby="play-type-help">
         {allLoaders.map((l) => <option value={l.type}>{l.name}</option>)}
       </select>
       <small id="play-type-help" class="help" data-type-help></small>
-    </label>
+    </div>
     <div class="field">
       <span id="play-color-label">Color</span>
       <div class="color">
@@ -39,11 +40,11 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
     </div>
     <label class="field">
       <span>Size <output name="sizeOut">96px</output></span>
-      <input type="range" name="size" min="16" max="160" step="4" value="96" />
+      <input type="range" name="size" min="16" max="160" step="4" value="96" aria-valuetext="96 pixels" />
     </label>
     <label class="field">
       <span>Speed <output name="speedOut">1×</output></span>
-      <input type="range" name="speed" min="0.25" max="3" step="0.25" value="1" />
+      <input type="range" name="speed" min="0.25" max="3" step="0.25" value="1" aria-valuetext="1 times normal speed" />
     </label>
     <label class="field">
       <span>Reduced motion</span>
@@ -53,14 +54,14 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
         <option value="false">Always animate</option>
       </select>
     </label>
-    <label class="check"><input type="checkbox" name="paused" /> Paused</label>
+    <label class="check"><input type="checkbox" name="paused" /> Pause motion</label>
   </form>
   <div class="snippet">
     <div class="tabs" role="tablist" aria-label="Code for">
-      {frameworks.map((f, i) => <button type="button" role="tab" data-fw={f} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{f}</button>)}
+      {frameworks.map((f, i) => <button type="button" role="tab" id={`play-tab-${f.toLowerCase()}`} aria-controls="play-code" data-fw={f} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{f}</button>)}
     </div>
-    <div class="code" role="tabpanel" aria-label="Code">
-      <pre><code data-snippet>&lt;mulling-status type="breath" size="96"&gt;&lt;/mulling-status&gt;</code></pre>
+    <div class="code" role="tabpanel" id="play-code" aria-labelledby="play-tab-html">
+      <pre data-snippet-pre><code data-snippet>&lt;mulling-status type="breath" size="96"&gt;&lt;/mulling-status&gt;</code></pre>
       <button type="button" class="copy" data-copy-snippet>Copy</button>
     </div>
   </div>
@@ -71,16 +72,16 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
   .view { display: grid; place-items: center; min-height: 18rem; background: var(--sl-color-gray-6); color: var(--site-accent); }
   .ctrl { border-left: 1px solid var(--sl-color-hairline); padding: 1rem; display: flex; flex-direction: column; gap: .9rem; font-size: var(--sl-text-xs); }
   .field { display: flex; flex-direction: column; gap: .35rem; border: 0; padding: 0; margin: 0; color: var(--sl-color-gray-3); }
-  .field > span, legend { display: flex; justify-content: space-between; color: var(--sl-color-gray-3); padding: 0; }
+  .field > span, .field > label, legend { display: flex; justify-content: space-between; color: var(--sl-color-gray-3); padding: 0; }
   .help { color: var(--sl-color-gray-3); font-size: var(--sl-text-2xs); line-height: 1.4; }
   .help:empty { display: none; }
   .help[data-warn] { color: var(--sl-color-orange-high, var(--sl-color-white)); }
   output { color: var(--sl-color-white); font-family: var(--__sl-font-mono); }
-  select { font: inherit; color: var(--sl-color-white); background: var(--sl-color-black); border: 1px solid var(--sl-color-gray-4); border-radius: 6px; padding: .3rem .4rem; }
+  select { font: inherit; color: var(--sl-color-white); background: var(--sl-color-black); border: 1px solid var(--site-control-border); border-radius: 6px; padding: .3rem .4rem; }
   select:disabled { opacity: .6; }
   input[type='range'] { accent-color: var(--sl-color-accent); width: 100%; }
   .color { display: flex; align-items: center; gap: .6rem; }
-  input[type='color'] { inline-size: 2.25rem; block-size: 1.6rem; padding: 0; border: 1px solid var(--sl-color-gray-4); border-radius: 6px; background: none; cursor: pointer; }
+  input[type='color'] { inline-size: 2.25rem; block-size: 1.6rem; padding: 0; border: 1px solid var(--site-control-border); border-radius: 6px; background: none; cursor: pointer; }
   .link { all: unset; cursor: pointer; color: var(--sl-color-accent-high); text-decoration: underline; text-underline-offset: 3px; }
   .link[hidden] { display: none; }
   .link:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
@@ -104,7 +105,7 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
   import { contrast, parseColor } from '../../../src/color';
   import { defaultStateLoaders } from '../../../src/states';
   import { copyText } from '../scripts/copy.ts';
-  import { sitePaused } from '../scripts/loaders.ts';
+  import { PAUSE_EVENT, sitePaused } from '../scripts/loaders.ts';
   import { radioGroup } from '../scripts/radio.ts';
 
   const FW_KEY = 'starlight-synced-tabs__framework'; // shared with the site's other framework tabs
@@ -149,6 +150,16 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
     const view = root.querySelector<HTMLElement>('[data-view]')!;
     const form = root.querySelector('form')!;
     const code = root.querySelector('[data-snippet]')!;
+    const pre = root.querySelector<HTMLElement>('[data-snippet-pre]')!;
+    const panel = root.querySelector<HTMLElement>('[role=tabpanel]')!;
+    const pausedBox = form.elements.namedItem('paused') as HTMLInputElement;
+    const sizeInput = form.elements.namedItem('size') as HTMLInputElement;
+    const speedInput = form.elements.namedItem('speed') as HTMLInputElement;
+    /** A long snippet scrolls sideways; keyboard users must be able to focus it to scroll it (WCAG 2.1.1). */
+    const markScrollable = () => {
+      if (pre.scrollWidth > pre.clientWidth + 1) pre.tabIndex = 0;
+      else pre.removeAttribute('tabindex');
+    };
     const typeSelect = form.elements.namedItem('type') as HTMLSelectElement;
     const typeLabel = root.querySelector('[data-type-label]')!;
     const typeHelp = root.querySelector<HTMLElement>('[data-type-help]')!;
@@ -205,6 +216,9 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
       loader.style.width = loader.style.height = `${size}px`;
       (form.elements.namedItem('sizeOut') as HTMLOutputElement).value = `${size}px`;
       (form.elements.namedItem('speedOut') as HTMLOutputElement).value = `${f.get('speed')}×`;
+      // Screen readers would otherwise read the bare numbers ("96", "1"), without the units shown on screen.
+      sizeInput.setAttribute('aria-valuetext', `${size} pixels`);
+      speedInput.setAttribute('aria-valuetext', `${f.get('speed')} times normal speed`);
 
       typeSelect.disabled = state === 'done' || state === 'error';
       typeLabel.textContent = working ? `Loader while ${state}` : 'Loader';
@@ -215,6 +229,7 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
           : '';
 
       code.textContent = write[fw](opts);
+      markScrollable();
       showContrast();
     };
 
@@ -245,7 +260,13 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
     const wanted = new URLSearchParams(location.search).get('loader');
     if (wanted && [...typeSelect.options].some((o) => o.value === wanted)) typeSelect.value = wanted;
     // Start in step with the site-wide pause button.
-    (form.elements.namedItem('paused') as HTMLInputElement).checked = sitePaused();
+    pausedBox.checked = sitePaused();
+    // …and stay in step with it: the header's pause button must not be undone by the next change here.
+    document.addEventListener(PAUSE_EVENT, (e) => {
+      pausedBox.checked = (e as CustomEvent<boolean>).detail;
+      render();
+    });
+    addEventListener('resize', markScrollable, { passive: true });
 
     form.addEventListener('input', (e) => {
       if (e.target === colorInput) color = colorInput.value;
@@ -268,6 +289,7 @@ const frameworks = ['HTML', 'JS', 'React', 'Vue'];
         o.setAttribute('aria-selected', String(o === t));
         o.tabIndex = o === t ? 0 : -1;
       }
+      panel.setAttribute('aria-labelledby', t.id);
       if (focus) t.focus();
       try {
         localStorage.setItem(FW_KEY, fw);

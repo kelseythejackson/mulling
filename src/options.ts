@@ -139,7 +139,7 @@ export function merge(base: Resolved, next: Partial<MountOptions>): Resolved {
     raw.state === undefined || (loaderStates as readonly unknown[]).includes(raw.state),
     undefined,
     `use ${either(loaderStates)}.${didYouMean(raw.state, loaderStates)}`.replace(/\.$/, ''),
-    'no state',
+    'the type option instead',
   );
   check('size', positive(raw.size) && Number.isFinite(raw.size), DEFAULTS.size, pixels);
   if (o.size > MAX_SIZE) check('size', false, MAX_SIZE, `the largest is ${MAX_SIZE}`);
@@ -157,7 +157,7 @@ export function merge(base: Resolved, next: Partial<MountOptions>): Resolved {
     raw.time === undefined || (typeof raw.time === 'number' && Number.isFinite(raw.time)),
     undefined,
     'use a number of seconds',
-    'no freeze',
+    'the live animation',
   );
 
   const rm = readBoolish(raw.reducedMotion);
@@ -168,6 +168,13 @@ export function merge(base: Resolved, next: Partial<MountOptions>): Resolved {
   // An empty label is never useful as an accessible name: use the default words instead.
   check('label', raw.label == null || (typeof raw.label === 'string' && raw.label !== ''), undefined, '', 'the default');
   if (raw.label === '') o.label = undefined;
+  // label only applies without a state. Setting both is a common mistake that otherwise changes nothing.
+  if (o.state && typeof o.label === 'string')
+    warnOnce(
+      source
+        ? `<${source} label> is ignored while state is set: use label-${o.state}.`
+        : `label is ignored while state is set: use labels: { ${o.state}: '…' }.`,
+    );
 
   o.labels = cleanMap(raw.labels, loaderStates, (x) => typeof x === 'string' && x !== '', 'labels');
   o.states = cleanMap(
