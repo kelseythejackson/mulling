@@ -29,6 +29,16 @@ Or, in a project with a bundler such as Vite:
 npm install mulling
 ```
 
+Then register the element once, in your entry file (for example `src/main.js`):
+
+```js
+import { defineElement } from "mulling";
+
+defineElement();
+```
+
+and use `<mulling-status state="thinking"></mulling-status>` in your HTML.
+
 ## Follow the AI
 
 Change the state as the AI works. Each change cross-fades, and screen readers hear it once.
