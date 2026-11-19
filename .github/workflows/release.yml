@@ -1,5 +1,6 @@
 # Publishes to npm when you publish a GitHub release (e.g. tag v1.0.0), after the full test suite passes.
-# One-time setup: add an npm access token as the repository secret NPM_TOKEN.
+# Uses npm trusted publishing, so there's no token to set up. One-time setup on npmjs.com:
+# mulling → Settings → Trusted Publisher → GitHub Actions, repo kelseythejackson/mulling, workflow release.yml.
 name: Release
 
 on:
@@ -35,8 +36,10 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
       - run: npm ci
+      # Trusted publishing needs npm 11.5.1 or later; Node 22 ships npm 10. Pinned, like the actions above.
+      - run: npm install -g npm@11.21.3
       # prepublishOnly runs the release check, lint, every non-browser test, the build, the type and
       # package checks and the size budgets before anything is uploaded.
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # No token: npm checks this workflow's OIDC identity (id-token: write) against the package's
+      # trusted publisher, and adds provenance automatically.
+      - run: npm publish --access public
