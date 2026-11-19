@@ -30,9 +30,9 @@ const items = [
   ))}
 </ul>
 <style>
-  .features { list-style: none; padding: 0; margin: 4rem 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  a { display: flex; flex-direction: column; gap: .4rem; height: 100%; padding: 1.1rem 1.1rem 1rem; border: 1px solid var(--sl-color-hairline); border-radius: 12px; text-decoration: none; transition: border-color .15s ease; }
-  a:hover { border-color: var(--sl-color-gray-4); }
+  .features { list-style: none; padding: 0; margin: var(--site-space-64) 0 var(--site-space-32); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--site-space-16); }
+  a { display: flex; flex-direction: column; gap: var(--site-space-6); height: 100%; padding: var(--site-space-16); border: 1px solid var(--sl-color-hairline); border-radius: var(--site-radius); text-decoration: none; transition: border-color .15s ease; }
+  a:hover { border-color: var(--site-control-border); }
   .t { color: var(--sl-color-white); font-weight: 600; font-size: var(--sl-text-sm); }
   .b { color: var(--sl-color-gray-3); font-size: var(--sl-text-sm); line-height: 1.55; }
   .more { margin-top: auto; color: var(--sl-color-gray-3); }

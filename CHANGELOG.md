@@ -15,7 +15,7 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 - **Warnings say what to write instead**: they list the accepted values, suggest the nearest match for a mistyped loader or state ("Did you mean "orbit"?"), and give an example for sizes and speeds. Colors are checked with the browser's CSS parser, so `color: 'blurple'` now warns
 - Size budgets raised for these messages, which add about 0.5 kB compressed. Everything is now 9.4 kB; core with one loader 7.2 kB
 - **The script-tag build is now `dist/mulling.umd.js`** (was `mulling.umd.cjs`). CDNs serve `.cjs` files with a type browsers won't run, so the documented script tag failed. `unpkg` and `jsdelivr` point at the new file
-- **The shared announcer is the default** (`announce: 'polite'`). Loaders are labelled images and changes are spoken through one live region for the page. `announce: 'off'` keeps the old per-loader `role="status"`
+- **The shared announcer is the default** (`announce: 'polite'`). Loaders are labeled images and changes are spoken through one live region for the page. `announce: 'off'` keeps the old per-loader `role="status"`
 - Orbit's dots have minimum sizes, so all three stay visible at 16–24px
 - Screenshot tests are taken at device resolution with a pixel-count threshold, so a broken small loader can no longer slip through. The old 1% threshold hid changes to any single 20px loader
 
@@ -68,7 +68,7 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
 - **Errors are announced assertively,** through a second live region, so they aren't queued behind other speech. Other states stay polite
 - New tests cover `nonce`, `cssFor()`, `contrastVar`, `refresh()`, element moves, iframes, strict CSP and Vue server rendering
 - **`labels` and `states` merge in `update()`.** Changing one label no longer drops the rest; a key set to `undefined` restores its default. The React and Vue components and `<thinking-loader>` still drop an entry when you remove it from the prop or attribute
-- **The React component passes `data-*` and `aria-*` props through.** `data-*` go on the wrapper (so `data-testid` works) and `aria-*` on the loader's labelled element (so `aria-describedby` works). They're in the prop types too. The Vue component now puts `aria-*` attributes on the labelled element as well
+- **The React component passes `data-*` and `aria-*` props through.** `data-*` go on the wrapper (so `data-testid` works) and `aria-*` on the loader's labeled element (so `aria-describedby` works). They're in the prop types too. The Vue component now puts `aria-*` attributes on the labeled element as well
 - **GitHub Actions are pinned to commit SHAs,** with the version in a comment, so a moved or hijacked tag can't change what runs in CI or the release. `npm run check:actions` (in CI and before publishing) fails on an unpinned action, and Dependabot opens monthly pull requests to update the pins
 - Size budgets raised by 0.5 kB: these fixes add about 0.3 kB compressed. Everything is now 8.8 kB; core with one loader 6.5 kB
 
@@ -87,7 +87,7 @@ The API is now stable: see "Stability" in the README for what that covers. Upgra
   - Script tag first for beginners: Installation, the quick start and the landing page's Copy button all give a snippet that works pasted into a blank HTML page, and the site check now proves it
   - The quick start shows how to change state in every framework, with a live demo, and a new "Stream a response" guide wires the states to a real `fetch()` stream
   - Gallery tiles are one link each, to the playground with that loader. The playground's code comes in HTML, JS, React and Vue, it has a color control with a contrast check, and its Loader menu sets the loader for the chosen state
-  - One pause control, labelled "Pause motion" / "Resume motion", and a notice with a Resume button when a page opens paused
+  - One pause control, labeled "Pause motion" / "Resume motion", and a notice with a Resume button when a page opens paused
   - The landing page has a menu on phones; state buttons are radio groups (one tab stop, arrow keys); code wraps on phones; "On this page" appears only on pages with 2+ headings
   - The Options page lists every accepted value and every option has its own link; the API reference says where to start and leaves out deprecated aliases
   - Wide code blocks can be scrolled with the keyboard (WCAG 2.1.1), as wide tables already could

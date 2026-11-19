@@ -43,7 +43,7 @@ void allPropsCovered;
 export const Mulling = defineComponent({
   name: 'Mulling',
   props: vueProps,
-  // Attributes are split by hand: aria-* go on the loader's labelled element, where assistive technology
+  // Attributes are split by hand: aria-* go on the loader's labeled element, where assistive technology
   // reads them; everything else (class, style, data-*, listeners) goes on the wrapper as usual.
   inheritAttrs: false,
   setup(props, { expose, attrs }) {

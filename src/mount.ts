@@ -60,7 +60,7 @@ export interface MountOptions {
    * How changes reach screen readers.
    * - `'polite'` (default): spoken through one shared, debounced live region for the page (or for the open
    *   modal dialog the loader is in), so several loaders, or fast state changes, don't talk over each other.
-   *   The loader itself is a labelled image.
+   *   The loader itself is a labeled image.
    * - `'off'`: the shared region isn't used. The loader is its own `role="status"` element containing its
    *   words as hidden text, so screen readers speak them when they change.
    */
@@ -224,7 +224,7 @@ export function mount(target: HTMLElement | ShadowRoot, options: MountOptions = 
       host.setAttribute('aria-hidden', 'true');
       words.textContent = '';
     } else if (opts.announce === 'polite') {
-      // Spoken through the shared announcer; the element itself is a static, labelled image.
+      // Spoken through the shared announcer; the element itself is a static, labeled image.
       host.setAttribute('role', 'img');
       host.setAttribute('aria-label', label);
       host.removeAttribute('aria-hidden');

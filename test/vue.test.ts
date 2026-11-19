@@ -83,7 +83,7 @@ describe('<Mulling> (Vue)', () => {
 });
 
 describe('<Mulling> (Vue): pass-through attributes', () => {
-  it('puts data-* on its wrapper and aria-* on the labelled loader element', () => {
+  it('puts data-* on its wrapper and aria-* on the labeled loader element', () => {
     const { container, host } = render({ state: 'thinking', 'data-testid': 'loader', 'aria-describedby': 'help' });
     expect(container.querySelector('[data-testid="loader"]')).not.toBeNull();
     expect(host()!.getAttribute('aria-describedby')).toBe('help');

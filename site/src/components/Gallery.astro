@@ -20,12 +20,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </ul>
 
 <style>
-  .gallery { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--sl-color-hairline); border-radius: 12px; overflow: hidden; }
+  .gallery { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--sl-color-hairline); border-radius: var(--site-radius); overflow: hidden; }
   .tile { position: relative; display: flex; flex-direction: column; height: 10.5rem; border-right: 1px solid var(--sl-color-hairline); border-bottom: 1px solid var(--sl-color-hairline); transition: background-color .15s ease; }
   .tile:nth-child(4n) { border-right: 0; }
   .tile:nth-last-child(-n + 4) { border-bottom: 0; }
   .tile:hover, .tile:focus-within { background: var(--sl-color-gray-6); }
-  .art { flex: 1; display: grid; place-items: center; color: var(--site-accent); }
+  .art { flex: 1; display: grid; place-items: center; color: var(--sl-color-accent); }
   .name::after { content: ''; position: absolute; inset: 0; }
   .name { text-decoration: none; }
   /* The whole tile shows focus where :has() works; elsewhere the link keeps its own ring. */
@@ -34,13 +34,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .tile:has(.name:focus-visible) { outline: 2px solid var(--sl-color-accent); outline-offset: -3px; }
   }
   /* Shown on hover and keyboard focus only: the highlighted tile already says it's clickable. */
-  .try { position: absolute; top: .75rem; right: 1rem; font-size: var(--sl-text-2xs); color: var(--sl-color-accent-high); opacity: 0; transition: opacity .15s ease; }
+  .try { position: absolute; top: var(--site-space-12); right: var(--site-space-16); font-size: var(--sl-text-2xs); color: var(--sl-color-accent-high); opacity: 0; transition: opacity .15s ease; }
   .tile:hover .try, .tile:focus-within .try { opacity: 1; }
-  .meta { display: flex; align-items: center; gap: .5rem; padding: 0 1rem .9rem; font-size: var(--sl-text-sm); }
+  /* Wraps on narrow tiles, so Copy moves under the name instead of being cut off. */
+  .meta { display: flex; flex-wrap: wrap; row-gap: var(--site-space-4); align-items: center; gap: var(--site-space-8); padding: 0 var(--site-space-16) var(--site-space-16); font-size: var(--sl-text-sm); }
   .name { color: var(--sl-color-white); }
   .tech { color: var(--sl-color-gray-3); font-family: var(--__sl-font-mono); font-size: var(--sl-text-2xs); }
-  .copy { all: unset; position: relative; z-index: 1; cursor: pointer; margin-left: auto; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); padding: 2px 8px; border-radius: 6px; border: 1px solid transparent; }
-  .tile:hover .copy, .copy:focus-visible { color: var(--sl-color-accent-high); border-color: var(--sl-color-gray-4); }
+  .copy { all: unset; position: relative; z-index: 1; cursor: pointer; margin-left: auto; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); padding: var(--site-space-4) var(--site-space-8); border-radius: var(--site-radius-sm); border: 1px solid transparent; }
+  .tile:hover .copy, .copy:focus-visible { color: var(--sl-color-accent-high); border-color: var(--site-control-border); }
   .copy:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 1px; }
   @media (hover: none) { .copy { color: var(--sl-color-accent-high); } }
   @media (max-width: 50rem) {

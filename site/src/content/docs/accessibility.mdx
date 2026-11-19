@@ -10,7 +10,7 @@ Mulling meets WCAG 2.1 AA for everything it draws and announces. This page cover
 - Changes are spoken through one announcer for the whole page: a hidden live region, the part of a page that screen readers read aloud when it changes. Changes are gathered for a quarter of a second and repeats are dropped. The latest state wins, so several loaders or fast changes never talk over each other.
 - `error` is announced assertively: it interrupts whatever the screen reader is saying. Every other state is polite, waiting until it finishes.
 - Inside an open modal dialog, the region goes inside the dialog, since screen readers ignore everything outside it.
-- Each loader is a labelled image, so it's still described when someone moves to it.
+- Each loader is a labeled image, so it's still described when someone moves to it.
 - `done` and `error` are still spoken if you remove the loader right after setting them.
 - `announce: 'off'` makes each loader its own `role="status"` element, with its words as hidden text inside. Use it only if your app already announces progress some other way.
 

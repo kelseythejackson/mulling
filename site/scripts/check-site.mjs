@@ -184,13 +184,13 @@ const check = (ok, what) => {
   await ctx.close();
 }
 {
-  // Desktop: one pause control, in the header, labelled with words.
+  // Desktop: one pause control, in the header, labeled with words.
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(`${base}/`, { waitUntil: 'load' });
   const pause = page.locator('[data-pause-all]').filter({ visible: true });
   check(
     (await pause.count()) === 1 && (await pause.textContent()).trim() === 'Pause motion',
-    'landing (desktop): exactly one pause control is visible, labelled “Pause motion”',
+    'landing (desktop): exactly one pause control is visible, labeled “Pause motion”',
   );
   // A gallery tile is one link to the playground, opened with that loader.
   const tile = page.locator('.gallery .tile').filter({ hasText: 'Orbit' });

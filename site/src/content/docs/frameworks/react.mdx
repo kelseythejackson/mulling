@@ -14,7 +14,7 @@ export function Status({ status }) {
 ```
 
 - **Props:** every `mount()` option is a prop (see [Options](../../reference/options/)), plus `className`, `style` and `id`.
-- **Pass-through:** `data-*` props, such as `data-testid`, go on the wrapper element. `aria-*` props, such as `aria-describedby`, go on the loader's labelled element, where screen readers read them. Use `label` rather than `aria-label`.
+- **Pass-through:** `data-*` props, such as `data-testid`, go on the wrapper element. `aria-*` props, such as `aria-describedby`, go on the loader's labeled element, where screen readers read them. Use `label` rather than `aria-label`.
 - **Ref:** gives you `update()`, `refresh()` and `element`.
 - **Server rendering:** it renders an empty, correctly sized `<span>` on the server and mounts in the browser, so nothing shifts.
 - **StrictMode:** supported, including its double mount.

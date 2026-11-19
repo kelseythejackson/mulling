@@ -93,7 +93,7 @@ describe('<Mulling> (React): pass-through attributes', () => {
     expect(container.querySelector('[data-testid="answer-loader"]')).not.toBeNull();
   });
 
-  it('puts aria-* attributes on the labelled loader element, and removes them when the prop goes', () => {
+  it('puts aria-* attributes on the labeled loader element, and removes them when the prop goes', () => {
     render({ state: 'thinking', 'aria-describedby': 'status-help' });
     expect(host()!.getAttribute('aria-describedby')).toBe('status-help');
     render({ state: 'thinking' });

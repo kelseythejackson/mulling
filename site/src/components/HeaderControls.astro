@@ -15,14 +15,14 @@ import Default from '@astrojs/starlight/components/ThemeSelect.astro';
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    height: 2rem;
-    padding: 0 0.7rem;
-    border-radius: 8px;
+    gap: var(--site-space-6);
+    height: var(--site-control-md);
+    padding: 0 var(--site-space-12);
+    border-radius: var(--site-radius-md);
     font-size: var(--sl-text-xs);
     white-space: nowrap;
     color: var(--sl-color-gray-3);
-    border: 1px solid var(--sl-color-gray-4);
+    border: 1px solid var(--site-control-border);
   }
   .pause-all:hover { color: var(--sl-color-white); }
   .pause-all:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
@@ -35,7 +35,7 @@ import Default from '@astrojs/starlight/components/ThemeSelect.astro';
 </script>
 
 <script>
-  // WCAG 2.5.3 (Label in Name): Starlight's search button is labelled "Search" but also shows its
+  // WCAG 2.5.3 (Label in Name): Starlight's search button is labeled "Search" but also shows its
   // keyboard shortcut, so its visible text isn't in its name. Naming it from its content fixes that.
   for (const b of document.querySelectorAll('button[data-open-modal]')) b.removeAttribute('aria-label');
 </script>

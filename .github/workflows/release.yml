@@ -21,6 +21,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - run: npm run build # cdn.spec.ts loads the built script-tag file
       - run: npm run test:browser
 
   publish:

@@ -37,17 +37,49 @@
   --sl-color-bg-sidebar: #0a0a0a;
   --sl-color-bg-inline-code: #161616;
   --sl-color-hairline: #262626;
-  --sl-color-hairline-light: #262626;
+  --sl-color-hairline-light: var(--sl-color-hairline); /* Starlight reads both; they're the same here */
 
   --site-code-bg: #161616;
-  --site-accent: #8ea2ff; /* the color every demo loader is drawn in */
-  --site-surface: #111111;
-  --site-radius: 12px;
-  /* Borders that identify a control (selects, color inputs, segmented groups): at least 3:1 (WCAG 1.4.11). */
+  /* Borders that identify a control (buttons, selects, color inputs, segmented groups, chips): at least 3:1
+     (WCAG 1.4.11). Decorative outlines (cards, dividers) use --sl-color-hairline. */
   --site-control-border: #6b6b6b; /* 3.7:1 on #0a0a0a */
 
+  /* Done and error marks get their own colors (the library's default is the loader color). The library reads
+     these custom properties through each loader's shadow root. Both are at least 4.5:1 on page and surface. */
+  --mulling-done: #3fb950; /* 7.8:1 on #0a0a0a */
+  --mulling-error: #f85149; /* 5.9:1 on #0a0a0a */
+
+  /* Spacing: a 4px scale. Every gap, padding and margin on the site uses one of these. */
+  --site-space-2: 2px;
+  --site-space-4: 0.25rem;
+  --site-space-6: 0.375rem;
+  --site-space-8: 0.5rem;
+  --site-space-12: 0.75rem;
+  --site-space-16: 1rem;
+  --site-space-20: 1.25rem;
+  --site-space-24: 1.5rem;
+  --site-space-32: 2rem;
+  --site-space-40: 2.5rem;
+  --site-space-64: 4rem;
+  --site-space-72: 4.5rem;
+
+  /* Radius: small controls, buttons and groups, cards, pills. */
+  --site-radius-sm: 6px;
+  --site-radius-md: 8px;
+  --site-radius: 12px;
+  --site-radius-full: 999px;
+
+  /* Control heights: one padding rule (inline 12px, 16px for large) for all three. */
+  --site-control-sm: 1.5rem;
+  --site-control-md: 2rem;
+  --site-control-lg: 2.5rem;
+  --site-disabled-opacity: 0.5;
+
+  /* Select chevron (Icon/Chevron in the design file), in the text color: an image can't use currentColor. */
+  --site-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
   --sl-text-h1: 2.5rem;
-  --sl-text-h2: 1.6rem;
+  --sl-text-h2: 1.5rem;
   --sl-text-h3: 1.25rem;
   --sl-line-height: 1.7;
   --sl-content-width: 46rem;
@@ -70,14 +102,16 @@
 
   --sl-color-bg-nav: #ffffff;
   --sl-color-bg-sidebar: #ffffff;
-  --sl-color-bg-inline-code: #f5f5f5;
+  --sl-color-bg-inline-code: #f7f7f7; /* the same as code blocks */
   --sl-color-hairline: #eaeaea;
-  --sl-color-hairline-light: #eaeaea;
 
   --site-code-bg: #f7f7f7;
-  --site-accent: #3b5bdb;
-  --site-surface: #fafafa;
   --site-control-border: #8a8a8a; /* 3.4:1 on #fff, 3.3:1 on #fafafa */
+
+  --site-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%230a0a0a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  --mulling-done: #1a7f37; /* 5.1:1 on #fff, 4.9:1 on #fafafa */
+  --mulling-error: #cf222e; /* 5.4:1 on #fff, 5.1:1 on #fafafa */
 }
 
 /* ---------- Type ---------- */
@@ -95,8 +129,8 @@ h1#_top {
 }
 .sl-markdown-content code:not(pre code) {
   border: 1px solid var(--sl-color-hairline);
-  border-radius: 5px;
-  padding: 0.05em 0.35em;
+  border-radius: var(--site-radius-sm);
+  padding: 0.05em 0.35em; /* em: scales with the code text */
   font-size: 0.86em;
 }
 
@@ -122,7 +156,7 @@ nav.sidebar .group-label .large {
   letter-spacing: 0;
 }
 nav.sidebar .top-level > li + li {
-  margin-top: 0.4rem;
+  margin-top: var(--site-space-6);
 }
 nav.sidebar a[aria-current="page"],
 nav.sidebar a[aria-current="page"]:hover {
@@ -131,8 +165,9 @@ nav.sidebar a[aria-current="page"]:hover {
   font-weight: 500;
   box-shadow: inset 2px 0 0 var(--sl-color-accent);
 }
+/* In light mode the surface (#fafafa) is too close to white to mark the current page: use the code gray. */
 :root[data-theme="light"] nav.sidebar a[aria-current="page"] {
-  background: #f5f5f5;
+  background: var(--site-code-bg);
 }
 .right-sidebar {
   border-inline-start: 1px solid var(--sl-color-hairline);
@@ -155,7 +190,7 @@ starlight-toc a[aria-current="true"] {
 
 /* ---------- Shared demo pieces ---------- */
 .site-demo {
-  color: var(--site-accent);
+  color: var(--sl-color-accent);
 }
 .site-card {
   border: 1px solid var(--sl-color-hairline);
@@ -164,15 +199,15 @@ starlight-toc a[aria-current="true"] {
 }
 .site-paused-notice {
   position: fixed;
-  inset-inline-start: 1rem;
-  inset-block-end: 1rem;
+  inset-inline-start: var(--site-space-16);
+  inset-block-end: var(--site-space-16);
   z-index: calc(var(--sl-z-index-menu, 90) + 1);
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0.6rem 0.5rem 0.9rem;
-  border: 1px solid var(--sl-color-gray-4);
-  border-radius: 10px;
+  gap: var(--site-space-12);
+  padding: var(--site-space-8) var(--site-space-8) var(--site-space-8) var(--site-space-16);
+  border: 1px solid var(--site-control-border);
+  border-radius: var(--site-radius);
   background: var(--sl-color-black);
   color: var(--sl-color-white);
   font-size: var(--sl-text-xs);
@@ -181,8 +216,8 @@ starlight-toc a[aria-current="true"] {
 .site-paused-notice button {
   all: unset;
   cursor: pointer;
-  padding: 3px 10px;
-  border-radius: 6px;
+  padding: var(--site-space-4) var(--site-space-12);
+  border-radius: var(--site-radius-sm);
   background: var(--sl-color-white);
   color: var(--sl-color-black);
   font-weight: 500;
@@ -194,26 +229,26 @@ starlight-toc a[aria-current="true"] {
 .site-result {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem;
-  border: 1px dashed var(--sl-color-gray-4);
+  gap: var(--site-space-12);
+  padding: var(--site-space-16);
+  border: 1px dashed var(--site-control-border);
   border-radius: var(--site-radius);
   font-size: var(--sl-text-sm);
   color: var(--sl-color-gray-3);
 }
 .site-seg {
   display: inline-flex;
-  gap: 2px;
-  padding: 2px;
+  gap: var(--site-space-2);
+  padding: var(--site-space-2);
   border: 1px solid var(--site-control-border);
-  border-radius: 8px;
+  border-radius: var(--site-radius-md);
   font-size: var(--sl-text-xs);
 }
 .site-seg button {
   all: unset;
   cursor: pointer;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: var(--site-space-4) var(--site-space-12);
+  border-radius: var(--site-radius-sm);
   color: var(--sl-color-gray-3);
 }
 /* The chosen option is filled with the text color (inverted), so it stands out at well over 3:1 in both
@@ -238,11 +273,14 @@ starlight-toc a[aria-current="true"] {
   }
 }
 
+/* Breakpoints (media queries can't read custom properties, so they're listed here instead):
+   30rem (480px) phones · 50rem (800px) wide layout · 56rem (896px) two-column hero and features. */
+
 /* Landing page */
 .section-sub {
   color: var(--sl-color-gray-3);
-  margin-top: 0.25rem !important;
-  margin-bottom: 1.5rem;
+  margin-top: var(--site-space-4) !important;
+  margin-bottom: var(--site-space-24);
 }
 
 /* The landing page has the sidebar only for its mobile menu (see src/routeData.ts). On wide screens,

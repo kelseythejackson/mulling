@@ -36,7 +36,7 @@ export function pickOptions(props: Partial<MountOptions>): MountOptions {
   return out as MountOptions;
 }
 
-/** aria-* props go on the loader's labelled element. aria-label and aria-hidden stay the library's: use `label`. */
+/** aria-* props go on the loader's labeled element. aria-label and aria-hidden stay the library's: use `label`. */
 export const isPassedAria = (key: string) => key.startsWith('aria-') && key !== 'aria-label' && key !== 'aria-hidden';
 
 /** Sets `attrs` on `el`, and removes the ones set last time that are gone now. Returns the names set. */

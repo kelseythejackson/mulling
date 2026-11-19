@@ -20,7 +20,7 @@ describe('mount', () => {
     }
   });
 
-  it('is labelled for screen readers by default', () => {
+  it('is labeled for screen readers by default', () => {
     const el = document.createElement('div');
     document.body.appendChild(el);
     const { element } = mount(el);

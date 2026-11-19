@@ -34,7 +34,7 @@ export const Mulling = forwardRef<MullingRef, MullingProps>(function Mulling(pro
   const options = pickOptions(props);
   const key = optionsKey(options);
 
-  // data-* go on the wrapper; aria-* (such as aria-describedby) on the loader's labelled element, where
+  // data-* go on the wrapper; aria-* (such as aria-describedby) on the loader's labeled element, where
   // assistive technology reads them. aria-label and aria-hidden are left to the library: use `label`.
   const data: Record<string, unknown> = {};
   const aria: Record<string, unknown> = {};

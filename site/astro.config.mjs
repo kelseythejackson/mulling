@@ -1,5 +1,5 @@
 // Docs site for mulling: design direction A, "Quiet Instrument".
-// Monochrome, one accent colour, so the loaders are the only moving, coloured things on the page.
+// Monochrome, one accent color, so the loaders are the only moving, colored things on the page.
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import starlight from '@astrojs/starlight';

@@ -29,7 +29,7 @@ A custom loader that uses the old names logs one warning. Other class names insi
 
 ## 2. Screen readers now use the shared announcer by default
 
-`announce` defaults to `'polite'` (it was `'off'`). Changes are spoken through one hidden live region for the page, and each loader is a labelled image (`role="img"`) instead of its own `role="status"` element.
+`announce` defaults to `'polite'` (it was `'off'`). Changes are spoken through one hidden live region for the page, and each loader is a labeled image (`role="img"`) instead of its own `role="status"` element.
 
 - **Most apps:** nothing to do. Remove any `announce: 'polite'` you added; it's now the default.
 - **If your app already announces progress itself**, add `announce: 'off'` (attribute `announce="off"`). The loader is then its own `role="status"` element with its words as hidden text inside. Before 1.0 the words were only in `aria-label`, which most screen readers don't announce when it changes, so in practice 0.x was silent here.

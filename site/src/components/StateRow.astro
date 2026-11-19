@@ -12,9 +12,9 @@ const { size = 32 } = Astro.props as { size?: number };
   ))}
 </div>
 <style>
-  .state-row { display: grid; grid-template-columns: repeat(5, 1fr); padding: 1.5rem 0.5rem 1.1rem; margin-block: 1.5rem; }
-  figure { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; margin: 0; }
+  .state-row { display: grid; grid-template-columns: repeat(5, 1fr); padding: var(--site-space-24) var(--site-space-8) var(--site-space-16); margin-block: var(--site-space-24); }
+  figure { display: flex; flex-direction: column; align-items: center; gap: var(--site-space-12); margin: 0; }
   figcaption { font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); }
   figcaption code { font-family: var(--__sl-font-mono); border: 0; background: none; padding: 0; font-size: inherit; }
-  @media (max-width: 30rem) { .state-row { grid-template-columns: repeat(3, 1fr); row-gap: 1.25rem; } }
+  @media (max-width: 30rem) { .state-row { grid-template-columns: repeat(3, 1fr); row-gap: var(--site-space-20); } }
 </style>

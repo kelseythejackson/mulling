@@ -39,13 +39,13 @@ const defaultFor = (type: string) =>
   ))}
 </div>
 <style>
-  .item { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1.5rem; align-items: start; padding-block: 1.25rem; border-top: 1px solid var(--sl-color-hairline); }
+  .item { display: grid; grid-template-columns: 9.5rem 1fr; gap: var(--site-space-24); align-items: start; padding-block: var(--site-space-20); border-top: 1px solid var(--sl-color-hairline); }
   .art { display: flex; align-items: center; justify-content: space-around; height: 7rem; background: var(--sl-color-gray-6); }
-  h3 { margin: 0 !important; display: flex; gap: .6rem; align-items: baseline; }
+  h3 { margin: 0 !important; display: flex; gap: var(--site-space-8); align-items: baseline; }
   h3 code { font-size: var(--sl-text-xs) !important; font-weight: 400; color: var(--sl-color-gray-3); }
-  .text p { margin: .3rem 0 .6rem !important; color: var(--sl-color-gray-3); }
-  dl { display: grid; grid-template-columns: 8rem 1fr; gap: .2rem 1rem; margin: 0; font-size: var(--sl-text-sm); }
+  .text p { margin: var(--site-space-4) 0 var(--site-space-8) !important; color: var(--sl-color-gray-3); }
+  dl { display: grid; grid-template-columns: 8rem 1fr; gap: var(--site-space-4) var(--site-space-16); margin: 0; font-size: var(--sl-text-sm); }
   dt { color: var(--sl-color-gray-3); }
   dd { margin: 0; color: var(--sl-color-white); }
-  @media (max-width: 36rem) { .item { grid-template-columns: 1fr; } }
+  @media (max-width: 30rem) { .item { grid-template-columns: 1fr; } }
 </style>
